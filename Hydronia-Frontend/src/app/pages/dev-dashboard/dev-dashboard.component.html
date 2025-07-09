@@ -1,0 +1,108 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <div class="header-content">
+      <div class="logo">
+        <span class="logo-icon">👨‍💻</span>
+        <h1>Hydronia Developer</h1>
+      </div>
+      <div class="user-info" *ngIf="user$ | async as user">
+        <span>Welcome, {{ user.first_name || user.username }}!</span>
+        <button class="switch-btn" (click)="switchToFarmerView()">
+          Switch to Farmer View
+        </button>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-content">
+    <div class="dashboard-grid">
+      <div class="card">
+        <h3>🔧 System Status</h3>
+        <p>Monitor system health and performance metrics.</p>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">99.9%</span>
+            <span class="stat-label">Uptime</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">45ms</span>
+            <span class="stat-label">Response Time</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>📡 API Usage</h3>
+        <p>Track API endpoints and usage statistics.</p>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">1,247</span>
+            <span class="stat-label">Requests Today</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">12</span>
+            <span class="stat-label">Active Endpoints</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🗄️ Database</h3>
+        <p>Database performance and storage metrics.</p>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">2.4GB</span>
+            <span class="stat-label">Storage Used</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">156</span>
+            <span class="stat-label">Total Records</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>🚨 System Logs</h3>
+        <p>Recent system events and logs.</p>
+        <div class="log-list">
+          <div class="log-entry info">
+            <span>ℹ️ User authentication successful</span>
+            <small>2 minutes ago</small>
+          </div>
+          <div class="log-entry success">
+            <span>✅ Database backup completed</span>
+            <small>1 hour ago</small>
+          </div>
+          <div class="log-entry warning">
+            <span>⚠️ High memory usage detected</span>
+            <small>3 hours ago</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="card wide">
+        <h3>🛠️ Developer Tools</h3>
+        <p>Access development and debugging tools.</p>
+        <div class="tool-grid">
+          <button class="tool-btn">
+            <span>📊</span>
+            Analytics
+          </button>
+          <button class="tool-btn">
+            <span>🔍</span>
+            Debug Console
+          </button>
+          <button class="tool-btn">
+            <span>📝</span>
+            API Docs
+          </button>
+          <button class="tool-btn">
+            <span>⚙️</span>
+            System Config
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

@@ -1,0 +1,83 @@
+<div class="dashboard-container">
+  <header class="dashboard-header">
+    <div class="header-content">
+      <div class="logo">
+        <span class="logo-icon">🌱</span>
+        <h1>Hydronia Farmer</h1>
+      </div>
+      <div class="user-info" *ngIf="user$ | async as user">
+        <span>Welcome, {{ user.first_name || user.username }}!</span>
+        <button
+          *ngIf="user.is_dev"
+          class="switch-btn"
+          (click)="switchToDevView()"
+        >
+          Switch to Dev Mode
+        </button>
+        <button class="logout-btn" (click)="logout()">Logout</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="dashboard-content">
+    <div class="dashboard-grid">
+      <div class="card">
+        <h3>🌿 Plant Monitoring</h3>
+        <p>Monitor your crops and plant health in real-time.</p>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">24</span>
+            <span class="stat-label">Active Plants</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">98%</span>
+            <span class="stat-label">Health Score</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>💧 Sensor Data</h3>
+        <p>Real-time environmental monitoring data.</p>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">6.8</span>
+            <span class="stat-label">pH Level</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">22°C</span>
+            <span class="stat-label">Temperature</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>📊 Growth Analytics</h3>
+        <p>Track growth patterns and yield predictions.</p>
+        <div class="stats">
+          <div class="stat">
+            <span class="stat-value">+15%</span>
+            <span class="stat-label">Growth Rate</span>
+          </div>
+          <div class="stat">
+            <span class="stat-value">45 days</span>
+            <span class="stat-label">To Harvest</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>⚠️ Alerts</h3>
+        <p>System notifications and alerts.</p>
+        <div class="alert-list">
+          <div class="alert success">
+            <span>✅ All systems running normally</span>
+          </div>
+          <div class="alert warning">
+            <span>⚠️ Low water level in tank 3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

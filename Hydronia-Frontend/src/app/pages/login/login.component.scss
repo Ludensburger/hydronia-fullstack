@@ -1,0 +1,397 @@
+/* Reset basics */
+* {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #e9f0ea;
+  color: #2d3a2e;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Container centers login card and background decoration */
+.login-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 1rem;
+}
+
+/* The login card */
+.login-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 12px 25px rgba(45, 58, 46, 0.15);
+  padding: 2.5rem 3rem;
+  max-width: 420px;
+  width: 100%;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  /* smooth width transition when resizing */
+  transition: padding 0.3s ease;
+}
+
+/* Header with logo and subtitle */
+.login-header {
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #2a6a3a;
+  user-select: none;
+}
+
+.logo-icon {
+  font-size: 2.4rem;
+}
+
+.subtitle {
+  font-weight: 400;
+  color: #5a6a54;
+  margin-top: 0.25rem;
+  font-size: 0.95rem;
+  line-height: 1.3;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Form styling */
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.3rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.3rem;
+  font-size: 0.95rem;
+  color: #384632;
+}
+
+.input-wrapper {
+  position: relative;
+}
+
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 0.55rem 2.5rem 0.55rem 0.9rem;
+  border: 1.8px solid #b6c1b0;
+  border-radius: 7px;
+  font-size: 1rem;
+  transition: border-color 0.25s ease;
+  outline-offset: 2px;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: #3b8e3a;
+  box-shadow: 0 0 6px #7ed47e88;
+}
+
+input.error {
+  border-color: #d94c4c;
+}
+
+.input-icon {
+  position: absolute;
+  right: 0.85rem;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  font-size: 1.25rem;
+  color: #7a8a70;
+  user-select: none;
+}
+
+/* Password toggle button */
+.password-toggle {
+  position: absolute;
+  right: 0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  font-size: 1.3rem;
+  cursor: pointer;
+  padding: 0 0.35rem;
+  color: #4a5a37;
+  user-select: none;
+  outline-offset: 2px;
+  transition: color 0.2s ease;
+}
+
+.password-toggle:hover {
+  color: #2a6a3a;
+}
+
+/* Error message */
+.error-message {
+  color: #d94c4c;
+  font-size: 0.82rem;
+  margin-top: 0.22rem;
+  font-weight: 600;
+}
+
+/* Global error message (centered) */
+.global-error {
+  text-align: center;
+  font-weight: 700;
+  margin-top: 0.8rem;
+}
+
+/* Form options: checkbox + forgot password */
+.form-options {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.9rem;
+  color: #4a5a37;
+}
+
+/* Checkbox styling */
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  padding-left: 28px;
+  font-size: 0.95rem;
+}
+
+.checkbox-wrapper input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 18px;
+  width: 18px;
+  background-color: #e0e6db;
+  border-radius: 4px;
+  border: 1.8px solid #b6c1b0;
+  transition: background-color 0.3s ease;
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked ~ .checkmark {
+  background-color: #3b8e3a;
+  border-color: #2a6a3a;
+}
+
+.checkmark::after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-wrapper input[type="checkbox"]:checked ~ .checkmark::after {
+  display: block;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 11px;
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+/* Forgot password link */
+.forgot-password {
+  color: #2a6a3a;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.25s ease;
+  white-space: nowrap; /* prevent line break */
+}
+
+.forgot-password:hover {
+  color: #1d4d23;
+  text-decoration: underline;
+}
+
+/* Submit button */
+.login-button {
+  background-color: #3b8e3a;
+  border: none;
+  border-radius: 8px;
+  padding: 0.75rem 0;
+  font-weight: 700;
+  color: white;
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+  min-height: 44px; /* mobile-friendly tappable height */
+}
+
+.login-button:hover:not(:disabled) {
+  background-color: #2a6a3a;
+}
+
+.login-button:disabled {
+  background-color: #a4b69a;
+  cursor: not-allowed;
+}
+
+/* Loading spinner placeholder */
+.loading-spinner {
+  width: 18px;
+  height: 18px;
+  border: 3px solid white;
+  border-top: 3px solid #6abb6a;
+  border-radius: 50%;
+  animation: spin 0.75s linear infinite;
+}
+
+/* Spin animation */
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Footer */
+.login-footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  font-size: 0.9rem;
+  color: #5a6a54;
+}
+
+.register-link {
+  color: #3b8e3a;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.25s ease;
+}
+
+.register-link:hover {
+  color: #1d4d23;
+  text-decoration: underline;
+}
+
+/* Background decoration circles */
+.background-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.decoration-circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.circle-1 {
+  width: 220px;
+  height: 220px;
+  background: #85c57d;
+  top: 20%;
+  left: 10%;
+}
+
+.circle-2 {
+  width: 280px;
+  height: 280px;
+  background: #5a9e48;
+  top: 60%;
+  right: 15%;
+}
+
+.circle-3 {
+  width: 180px;
+  height: 180px;
+  background: #70b857;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Responsive tweaks */
+
+/* Tablet and smaller */
+@media (max-width: 768px) {
+  .login-card {
+    max-width: 90vw;
+    padding: 2rem 2rem;
+  }
+  .subtitle {
+    max-width: 100%;
+    font-size: 0.9rem;
+  }
+  .form-options {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+  .forgot-password {
+    white-space: normal;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 420px) {
+  .login-card {
+    padding: 1.8rem 1.5rem;
+  }
+  .logo {
+    font-size: 1.5rem;
+  }
+  .logo-icon {
+    font-size: 2rem;
+  }
+  .login-button {
+    font-size: 1rem;
+    min-height: 48px;
+  }
+  .form-options {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .checkbox-wrapper {
+    font-size: 1rem;
+    padding-left: 28px;
+  }
+  .forgot-password {
+    align-self: flex-end;
+  }
+}

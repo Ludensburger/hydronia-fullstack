@@ -1,6 +1,12 @@
 from .models import *
 from rest_framework import serializers
 
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name', 'role', 'is_farmer', 'is_dev']
+        read_only_fields = ['id', 'is_farmer', 'is_dev']
+
 class SensorReadingSerializer(serializers.ModelSerializer):
     class Meta:
         model = SensorReading

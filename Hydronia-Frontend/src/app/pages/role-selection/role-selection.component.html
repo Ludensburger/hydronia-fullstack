@@ -1,0 +1,57 @@
+<div class="role-selection-container">
+  <div class="role-selection-card">
+    <div class="header">
+      <div class="logo">
+        <div class="logo-icon">🌱</div>
+        <h1>Hydronia</h1>
+      </div>
+      <h2>Choose Your View</h2>
+      <p class="subtitle" *ngIf="user$ | async as user">
+        Welcome <strong>{{ user.first_name || user.username }}</strong
+        >! As a developer, you can access both views.
+      </p>
+    </div>
+
+    <div class="role-options">
+      <div class="role-card farmer-card" (click)="selectRole('farmer')">
+        <div class="role-icon">🚜</div>
+        <h3>Farmer View</h3>
+        <p>
+          Access the farming dashboard with crop monitoring, sensor data, and
+          plant management tools.
+        </p>
+        <div class="features">
+          <span class="feature">📊 Dashboard</span>
+          <span class="feature">🌿 Plant Monitoring</span>
+          <span class="feature">💧 Sensor Data</span>
+        </div>
+        <button class="select-btn farmer-btn">Enter as Farmer</button>
+      </div>
+
+      <div class="role-card dev-card" (click)="selectRole('dev')">
+        <div class="role-icon">👨‍💻</div>
+        <h3>Developer View</h3>
+        <p>
+          Access advanced tools, system management, API endpoints, and
+          development features.
+        </p>
+        <div class="features">
+          <span class="feature">⚙️ System Config</span>
+          <span class="feature">🔧 API Tools</span>
+          <span class="feature">📈 Analytics</span>
+        </div>
+        <button class="select-btn dev-btn">Enter as Developer</button>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>You can switch between views at any time from the navigation menu.</p>
+    </div>
+  </div>
+
+  <div class="background-decoration">
+    <div class="decoration-circle circle-1"></div>
+    <div class="decoration-circle circle-2"></div>
+    <div class="decoration-circle circle-3"></div>
+  </div>
+</div>

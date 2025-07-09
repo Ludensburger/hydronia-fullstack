@@ -17,6 +17,20 @@ def protected_test_view(request):
         'user_id': request.user.id
     })
 
+# User profile endpoint with role information
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def user_profile_view(request):
+    serializer = UserSerializer(request.user)
+    return Response({
+        'user': serializer.data,
+        'permissions': {
+            'can_access_farmer_view': True,  # All users can access farmer view
+            'can_access_dev_view': request.user.is_dev,  # Only devs can access dev view
+            'needs_role_selection': request.user.is_dev  # Only devs see role selection
+        }
+    })
+
 # POST /sensors/
 class SensorReadingCreateAPIView(generics.CreateAPIView):
     queryset = SensorReading.objects.all()

@@ -26,6 +26,9 @@ urlpatterns = [
     path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
     path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
+    # User profile endpoint
+    path('api/user/profile/', user_profile_view, name='user-profile'),
+
     # Test protected endpoint
     path('api/test/', protected_test_view, name='protected-test'),
 

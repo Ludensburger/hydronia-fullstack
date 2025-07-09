@@ -1,0 +1,281 @@
+/* Reset basics */
+* {
+  box-sizing: border-box;
+}
+
+body,
+html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  background: #e9f0ea;
+  color: #2d3a2e;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Container centers card and background */
+.role-selection-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  padding: 1rem;
+}
+
+/* The card */
+.role-selection-card {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 12px 25px rgba(45, 58, 46, 0.15);
+  padding: 2.5rem 3rem;
+  max-width: 720px;
+  width: 100%;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  transition: padding 0.3s ease;
+}
+
+/* Header with logo, title and subtitle */
+.header {
+  text-align: center;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-weight: 700;
+  font-size: 1.8rem;
+  color: #2a6a3a;
+  user-select: none;
+}
+
+.logo-icon {
+  font-size: 2.4rem;
+}
+
+.header h2 {
+  margin-top: 0.4rem;
+  font-weight: 700;
+  color: #3b8e3a;
+  font-size: 1.4rem;
+}
+
+.subtitle {
+  font-weight: 400;
+  color: #5a6a54;
+  margin-top: 0.3rem;
+  font-size: 1rem;
+  line-height: 1.4;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Role options container */
+.role-options {
+  display: flex;
+  gap: 2rem;
+  justify-content: center;
+  flex-wrap: nowrap; /* Prevent wrapping on small screens */
+  overflow-x: auto; /* Allow horizontal scroll if too narrow */
+  padding-bottom: 0.5rem; /* Give some breathing room if scroll appears */
+}
+
+/* Individual role cards */
+.role-card {
+  flex: 1 1 320px;
+  background: #f6f9f4;
+  border-radius: 12px;
+  padding: 1.8rem 2rem;
+  box-shadow: 0 6px 15px rgba(45, 58, 46, 0.08);
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  transition: box-shadow 0.25s ease, transform 0.2s ease;
+  user-select: none;
+}
+
+.role-card:hover,
+.role-card:focus-within {
+  box-shadow: 0 10px 30px rgba(45, 58, 46, 0.18);
+  transform: translateY(-4px);
+  outline: none;
+}
+
+.role-icon {
+  font-size: 3.2rem;
+  color: #3b8e3a;
+  user-select: none;
+}
+
+.role-card h3 {
+  margin: 0;
+  color: #2a6a3a;
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.role-card p {
+  color: #4a5a37;
+  font-size: 0.95rem;
+  flex-grow: 1;
+  line-height: 1.4;
+}
+
+/* Features inside role card */
+.features {
+  display: flex;
+  gap: 0.7rem;
+  flex-wrap: wrap;
+}
+
+.feature {
+  background: #a8c797;
+  color: #2a6a3a;
+  font-weight: 600;
+  border-radius: 20px;
+  padding: 0.25rem 0.9rem;
+  font-size: 0.9rem;
+  user-select: none;
+}
+
+/* Buttons */
+.select-btn {
+  background-color: #3b8e3a;
+  border: none;
+  border-radius: 8px;
+  padding: 0.6rem 0;
+  font-weight: 700;
+  color: white;
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  user-select: none;
+  min-height: 44px;
+}
+
+.select-btn:hover {
+  background-color: #2a6a3a;
+}
+
+/* Different button variants for roles */
+.farmer-btn {
+  background-color: #4b9d3f;
+}
+
+.farmer-btn:hover {
+  background-color: #36782a;
+}
+
+.dev-btn {
+  background-color: #3572b0;
+}
+
+.dev-btn:hover {
+  background-color: #2a4f7e;
+}
+
+/* Footer */
+.footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #5a6a54;
+}
+
+/* Background decoration circles */
+.background-decoration {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.decoration-circle {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(40px);
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.circle-1 {
+  width: 220px;
+  height: 220px;
+  background: #85c57d;
+  top: 20%;
+  left: 10%;
+}
+
+.circle-2 {
+  width: 280px;
+  height: 280px;
+  background: #5a9e48;
+  top: 60%;
+  right: 15%;
+}
+
+.circle-3 {
+  width: 180px;
+  height: 180px;
+  background: #70b857;
+  bottom: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* Responsive tweaks */
+
+/* Tablet and smaller */
+@media (max-width: 768px) {
+  .role-selection-card {
+    max-width: 90vw;
+    padding: 2rem 2rem;
+  }
+  .header h2 {
+    font-size: 1.2rem;
+  }
+  .subtitle {
+    max-width: 100%;
+    font-size: 0.95rem;
+  }
+  .role-options {
+    gap: 1.3rem;
+  }
+}
+
+/* Mobile phones */
+@media (max-width: 420px) {
+  .role-selection-card {
+    padding: 1.8rem 1.5rem;
+  }
+  .logo {
+    font-size: 1.5rem;
+  }
+  .logo-icon {
+    font-size: 2rem;
+  }
+  .header h2 {
+    font-size: 1.1rem;
+  }
+  .role-options {
+    flex-direction: column;
+  }
+  .role-card {
+    flex-basis: 100%;
+  }
+  .select-btn {
+    font-size: 1rem;
+    min-height: 48px;
+  }
+}
