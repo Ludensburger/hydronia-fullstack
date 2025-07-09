@@ -1,0 +1,38 @@
+Weekly To-Do List (July 9–11, 2025)
+
+Tuesday, July 8, 2025
+•	Spin up Django project & env setup (Assigned: Tan; Must-Have Areas: Backend Architecture, Data Management Module)
+•	Create .gitignore, IDE configs, README.md (Assigned: Tan; Must-Have Areas: System Admin/Developer)
+•	Draft API contract (POST/GET sensors & images) (Assigned: Tan; Must-Have Areas: Backend Architecture) [INSIDE key_endpoints.txt]
+•	Outline DB schema for SensorReading & PlantImage (Assigned: Tan; Must-Have Areas: Data Management Module)
+
+Wednesday, July 9, 2025
+•	Implement POST /sensors/ & POST /images/ endpoints (Assigned: Tan; Must-Have Areas: Backend Architecture, Sensor Monitoring Module, Visual Monitoring Module)
+•	Create Django models & run migrations (Assigned: Tan; Must-Have Areas: Data Management Module)
+•	Configure local storage stub for image uploads (Assigned: Tan; Must-Have Areas: Visual Monitoring Module)
+•	Smoke-test endpoints with curl/Postman (Assigned: Tan; Must-Have Areas: System Admin/Developer)
+
+Thursday, July 10, 2025
+•	Implement GET /sensors/{row}/{cycle} & GET /images/{row}/{cycle} (Assigned: Tan; Must-Have Areas: Backend Architecture, Data Management Module)
+•	Write ORM/raw SQL queries for recent entries (Assigned: Tan; Must-Have Areas: Data Management Module)
+•	Annotate readings with threshold flags (in_range) (Assigned: Tan; Must-Have Areas: Alerting & Notification Module)
+•	Update Swagger/OpenAPI with new routes & README testing guide (Assigned: Tan; Must-Have Areas: System Admin/Developer)
+
+Friday, July 11, 2025
+•   Test connection with frontend.
+•   Start finding lettuce dataset online
+•   Applying machine learning with online dataset temporarily
+
+Fuzzy Logic Integration
+Rather than a Random Forest we can do this:
+
+* Define linguistic vars:
+    – pH: {too_low, low, optimal, high, too_high}
+    – EC: {low, optimal, high}
+    – Temp: {cold, cool, optimal, warm, hot}
+
+* Build ~10–15 Mamdani rules:
+    IF pH is low AND EC is optimal THEN nutrient_risk is medium
+    IF pH is too_low OR temp is cold THEN growth_rate is slow
+    
+* Defuzzify with centroid method → crisp risk scores
