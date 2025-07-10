@@ -32,9 +32,24 @@ export class AuthService {
   public currentUser$ = this.currentUserSubject.asObservable();
 
   constructor(private http: HttpClient) {
+    // Clear any invalid tokens first
+    this.clearInvalidTokens();
+
     // Check if user is already logged in and load profile
     if (this.isLoggedIn()) {
-      this.loadUserProfile().subscribe();
+      this.loadUserProfile().subscribe({
+        next: (profile) => {
+          console.log('User profile loaded successfully', profile);
+        },
+        error: (error) => {
+          console.log(
+            'Failed to load user profile, token might be expired',
+            error
+          );
+          // Clear invalid token
+          this.logout();
+        },
+      });
     }
   }
 
@@ -54,11 +69,15 @@ export class AuthService {
   }
 
   loadUserProfile(): Observable<UserProfile> {
+    console.log('Loading user profile...');
     const headers = this.getAuthHeaders();
     return this.http
       .get<UserProfile>(`${this.baseUrl}/user/profile/`, { headers })
       .pipe(
         tap((profile) => {
+          console.log('Raw profile response:', profile);
+          console.log('Profile user:', profile.user);
+          console.log('Profile permissions:', profile.permissions);
           this.currentUserSubject.next(profile.user);
           localStorage.setItem('user_profile', JSON.stringify(profile));
         })
@@ -82,7 +101,26 @@ export class AuthService {
   }
 
   isLoggedIn(): boolean {
-    return !!localStorage.getItem('access_token');
+    const token = localStorage.getItem('access_token');
+    if (!token) return false;
+
+    try {
+      // Basic token validation - check if it's not expired
+      const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+      const currentTime = Date.now() / 1000;
+
+      if (tokenPayload.exp < currentTime) {
+        console.log('Token is expired, logging out');
+        this.logout();
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.log('Invalid token format, logging out');
+      this.logout();
+      return false;
+    }
   }
 
   private getAuthHeaders(): HttpHeaders {
@@ -90,6 +128,24 @@ export class AuthService {
     return new HttpHeaders({
       Authorization: `Bearer ${token}`,
     });
+  }
+
+  private clearInvalidTokens() {
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      try {
+        const tokenPayload = JSON.parse(atob(token.split('.')[1]));
+        const currentTime = Date.now() / 1000;
+
+        if (tokenPayload.exp < currentTime) {
+          console.log('Found expired token, clearing');
+          this.logout();
+        }
+      } catch (error) {
+        console.log('Found invalid token, clearing');
+        this.logout();
+      }
+    }
   }
 
   // Role-based methods

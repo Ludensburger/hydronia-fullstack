@@ -1,0 +1,71 @@
+// Health Status Indicator Component Styles
+
+// Smooth animation for progress circle
+circle {
+  transition: stroke-dasharray 1s ease-out, stroke-dashoffset 1s ease-out;
+}
+
+// Pulse animation for excellent health
+.excellent-pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 10px rgba(34, 197, 94, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+  }
+}
+
+// Hover effects
+.health-indicator:hover {
+  transform: scale(1.05);
+  transition: transform 0.2s ease-in-out;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .health-details {
+    display: none;
+  }
+
+  .health-indicator {
+    justify-content: center;
+  }
+}
+
+// Status-specific styling
+.status-excellent {
+  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.3));
+}
+
+.status-good {
+  filter: drop-shadow(0 0 8px rgba(34, 197, 94, 0.2));
+}
+
+.status-moderate {
+  filter: drop-shadow(0 0 8px rgba(234, 179, 8, 0.3));
+}
+
+.status-poor {
+  filter: drop-shadow(0 0 8px rgba(220, 38, 38, 0.3));
+}
+
+// Progress bar animation
+.progress-bar {
+  animation: growWidth 1s ease-out;
+}
+
+@keyframes growWidth {
+  from {
+    width: 0%;
+  }
+  to {
+    width: var(--target-width);
+  }
+}

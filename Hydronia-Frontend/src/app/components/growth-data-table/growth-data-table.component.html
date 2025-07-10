@@ -1,0 +1,190 @@
+<div class="bg-white rounded-lg shadow-lg p-6 space-y-4">
+  <!-- Table Header -->
+  <div class="flex items-center justify-between">
+    <h3 class="text-lg font-semibold">Growth Data</h3>
+    <div class="flex items-center gap-2">
+      <button
+        (click)="exportToCSV()"
+        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2"
+      >
+        📥 Export CSV
+      </button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="flex flex-wrap items-center gap-4" *ngIf="showFilters">
+    <div class="flex-1 min-w-64">
+      <input
+        type="text"
+        [(ngModel)]="searchQuery"
+        placeholder="Search data..."
+        class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+      />
+    </div>
+    <div class="flex items-center gap-2">
+      <label class="text-sm font-medium">Show:</label>
+      <select
+        [(ngModel)]="pageSize"
+        (change)="currentPage = 1"
+        class="flex h-10 rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+      >
+        <option value="10">10</option>
+        <option value="25">25</option>
+        <option value="50">50</option>
+        <option value="100">100</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- Table -->
+  <div class="overflow-x-auto">
+    <table class="w-full border-collapse">
+      <thead>
+        <tr class="border-b">
+          <th class="text-left p-3 font-medium">
+            <button
+              (click)="sort('timestamp')"
+              class="flex items-center gap-2 hover:text-primary transition-colors"
+            >
+              Timestamp
+              <span class="text-xs">{{ getSortIcon("timestamp") }}</span>
+            </button>
+          </th>
+          <th class="text-left p-3 font-medium">
+            <button
+              (click)="sort('pH')"
+              class="flex items-center gap-2 hover:text-primary transition-colors"
+            >
+              pH Level
+              <span class="text-xs">{{ getSortIcon("pH") }}</span>
+            </button>
+          </th>
+          <th class="text-left p-3 font-medium">
+            <button
+              (click)="sort('ec')"
+              class="flex items-center gap-2 hover:text-primary transition-colors"
+            >
+              EC (mS/cm)
+              <span class="text-xs">{{ getSortIcon("ec") }}</span>
+            </button>
+          </th>
+          <th class="text-left p-3 font-medium">
+            <button
+              (click)="sort('temperature')"
+              class="flex items-center gap-2 hover:text-primary transition-colors"
+            >
+              Temperature
+              <span class="text-xs">{{ getSortIcon("temperature") }}</span>
+            </button>
+          </th>
+          <th class="text-left p-3 font-medium">
+            <button
+              (click)="sort('humidity')"
+              class="flex items-center gap-2 hover:text-primary transition-colors"
+            >
+              Humidity
+              <span class="text-xs">{{ getSortIcon("humidity") }}</span>
+            </button>
+          </th>
+          <th class="text-left p-3 font-medium">
+            <button
+              (click)="sort('tph')"
+              class="flex items-center gap-2 hover:text-primary transition-colors"
+            >
+              TPH
+              <span class="text-xs">{{ getSortIcon("tph") }}</span>
+            </button>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr
+          *ngFor="let row of paginatedData; let i = index"
+          [class]="i % 2 === 0 ? 'bg-gray-50' : 'bg-white'"
+          class="border-b hover:bg-gray-100 transition-colors"
+        >
+          <td class="p-3 text-sm">{{ row.timestamp | date : "medium" }}</td>
+          <td class="p-3 text-sm" [ngClass]="getValueColor('pH', row.pH)">
+            {{ row.pH }}
+          </td>
+          <td class="p-3 text-sm" [ngClass]="getValueColor('ec', row.ec)">
+            {{ row.ec }}
+          </td>
+          <td
+            class="p-3 text-sm"
+            [ngClass]="getValueColor('temperature', row.temperature)"
+          >
+            {{ row.temperature }}°C
+          </td>
+          <td
+            class="p-3 text-sm"
+            [ngClass]="getValueColor('humidity', row.humidity)"
+          >
+            {{ row.humidity }}%
+          </td>
+          <td class="p-3 text-sm">{{ row.tph }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!-- No Data Message -->
+    <div *ngIf="paginatedData.length === 0" class="text-center py-12">
+      <div class="text-4xl mb-4">📊</div>
+      <p class="text-muted-foreground">No data available</p>
+      <p class="text-sm text-muted-foreground mt-2">
+        {{
+          searchQuery
+            ? "No results match your search."
+            : "Start monitoring to see data here."
+        }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex items-center justify-between" *ngIf="totalPages > 1">
+    <div class="text-sm text-muted-foreground">
+      Showing {{ (currentPage - 1) * pageSize + 1 }} to
+      {{ min(currentPage * pageSize, filteredData.length) }} of
+      {{ filteredData.length }} results
+    </div>
+    <div class="flex items-center gap-2">
+      <button
+        (click)="goToPage(currentPage - 1)"
+        [disabled]="currentPage === 1"
+        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2"
+      >
+        Previous
+      </button>
+
+      <div class="flex items-center gap-1">
+        <button
+          *ngFor="
+            let page of pageNumbers.slice(
+              max(0, currentPage - 3),
+              min(pageNumbers.length, currentPage + 2)
+            )
+          "
+          (click)="goToPage(page)"
+          [class]="
+            page === currentPage
+              ? 'bg-primary text-primary-foreground'
+              : 'bg-background hover:bg-accent'
+          "
+          class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input h-9 w-9"
+        >
+          {{ page }}
+        </button>
+      </div>
+
+      <button
+        (click)="goToPage(currentPage + 1)"
+        [disabled]="currentPage === totalPages"
+        class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-9 px-4 py-2"
+      >
+        Next
+      </button>
+    </div>
+  </div>
+</div>

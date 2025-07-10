@@ -1,51 +1,184 @@
-<div class="role-selection-container">
-  <div class="role-selection-card">
-    <div class="header">
-      <div class="logo">
-        <div class="logo-icon">🌱</div>
-        <h1>Hydronia</h1>
+<div
+  class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 p-4 flex items-center justify-center"
+>
+  <div class="max-w-4xl w-full space-y-6">
+    <div class="text-center space-y-4">
+      <div class="flex items-center justify-center gap-3">
+        <svg
+          class="h-12 w-12 text-primary"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"
+          />
+        </svg>
+        <h1 class="text-4xl font-bold text-primary">Hydronia</h1>
       </div>
-      <h2>Choose Your View</h2>
-      <p class="subtitle" *ngIf="user$ | async as user">
+      <p class="text-xl text-muted-foreground">
+        IoT-Based Aquaponic Lettuce Monitoring System
+      </p>
+      <p class="text-sm text-muted-foreground max-w-2xl mx-auto">
+        CNN-Driven Plant Growth Monitoring and Early Detection System for Fungal
+        and Pest Infestations
+      </p>
+      <p class="text-sm text-primary font-medium" *ngIf="user$ | async as user">
         Welcome <strong>{{ user.first_name || user.username }}</strong
-        >! As a developer, you can access both views.
+        >! Please choose your dashboard view.
       </p>
     </div>
 
-    <div class="role-options">
-      <div class="role-card farmer-card" (click)="selectRole('farmer')">
-        <div class="role-icon">🚜</div>
-        <h3>Farmer View</h3>
-        <p>
-          Access the farming dashboard with crop monitoring, sensor data, and
-          plant management tools.
-        </p>
-        <div class="features">
-          <span class="feature">📊 Dashboard</span>
-          <span class="feature">🌿 Plant Monitoring</span>
-          <span class="feature">💧 Sensor Data</span>
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- Farmer Dashboard Card -->
+      <div
+        class="bg-card border border-border rounded-lg shadow-sm transition-all hover:shadow-lg"
+      >
+        <div class="p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div
+              class="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center"
+            >
+              <svg
+                class="h-6 w-6 text-green-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold">Farmer Dashboard</h3>
+          </div>
+
+          <p class="text-muted-foreground mb-4">
+            Monitor your crops, view real-time data, and receive alerts for
+            optimal growing conditions.
+          </p>
+
+          <div class="space-y-2 mb-4">
+            <span
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary text-secondary-foreground mr-2"
+              >Real-time Monitoring</span
+            >
+            <span
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary text-secondary-foreground mr-2"
+              >Plant Health Tracking</span
+            >
+            <span
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary text-secondary-foreground mr-2"
+              >Alert Management</span
+            >
+            <span
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary text-secondary-foreground"
+              >Manual Logging</span
+            >
+          </div>
+
+          <button
+            class="w-full py-2 px-4 bg-primary text-primary-foreground rounded-md text-sm font-medium transition-colors hover:bg-primary/90"
+            (click)="selectRole('farmer')"
+            type="button"
+          >
+            Access Farmer Dashboard
+          </button>
         </div>
-        <button class="select-btn farmer-btn">Enter as Farmer</button>
       </div>
 
-      <div class="role-card dev-card" (click)="selectRole('dev')">
-        <div class="role-icon">👨‍💻</div>
-        <h3>Developer View</h3>
-        <p>
-          Access advanced tools, system management, API endpoints, and
-          development features.
-        </p>
-        <div class="features">
-          <span class="feature">⚙️ System Config</span>
-          <span class="feature">🔧 API Tools</span>
-          <span class="feature">📈 Analytics</span>
+      <!-- Developer Dashboard Card -->
+      <div
+        class="bg-card border border-border rounded-lg shadow-sm transition-all hover:shadow-lg"
+      >
+        <div class="p-6">
+          <div class="flex items-center gap-3 mb-4">
+            <div
+              class="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center"
+            >
+              <svg
+                class="h-6 w-6 text-blue-600"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"
+                />
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+                />
+              </svg>
+            </div>
+            <h3 class="text-xl font-semibold">System Administration</h3>
+          </div>
+
+          <p class="text-muted-foreground mb-4">
+            Configure system settings, manage AI models, and monitor system
+            health & development tools.
+          </p>
+
+          <div class="space-y-2 mb-4">
+            <span
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary text-secondary-foreground mr-2"
+              >System Configuration</span
+            >
+            <span
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary text-secondary-foreground mr-2"
+              >AI Model Management</span
+            >
+            <span
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary text-secondary-foreground mr-2"
+              >API Tools</span
+            >
+            <span
+              class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-secondary text-secondary-foreground"
+              >Data Analytics</span
+            >
+          </div>
+
+          <button
+            class="w-full py-2 px-4 bg-primary text-primary-foreground rounded-md text-sm font-medium transition-colors hover:bg-primary/90"
+            (click)="selectRole('dev')"
+            type="button"
+          >
+            Access Developer Dashboard
+          </button>
         </div>
-        <button class="select-btn dev-btn">Enter as Developer</button>
       </div>
     </div>
 
-    <div class="footer">
-      <p>You can switch between views at any time from the navigation menu.</p>
+    <div class="text-center text-sm text-muted-foreground">
+      <p>
+        Developed by: Tan, Robien Lee • Mendoza, Ryu • Valencia, Percival Louis
+      </p>
+      <p class="mt-1">
+        You can switch between views at any time from the navigation menu.
+      </p>
+      <button
+        (click)="logout()"
+        class="mt-4 px-4 py-2 text-sm text-muted-foreground hover:text-destructive transition-colors"
+      >
+        Logout
+      </button>
+      <button
+        (click)="testClick()"
+        class="mt-2 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+      >
+        Test Click
+      </button>
     </div>
   </div>
 

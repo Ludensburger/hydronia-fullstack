@@ -1,0 +1,63 @@
+// Plant Metrics Chart Component Styles
+
+// Hover effects for data points
+circle {
+  transition: all 0.2s ease-in-out;
+}
+
+circle:hover {
+  r: 6;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+}
+
+// Chart container styling
+.chart-container {
+  position: relative;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-radius: 0.5rem;
+}
+
+// Grid styling
+.grid-lines {
+  stroke: #e5e7eb;
+  stroke-width: 1;
+  opacity: 0.3;
+}
+
+// Responsive adjustments
+@media (max-width: 768px) {
+  .chart-container {
+    height: 250px;
+  }
+
+  .axis-labels {
+    font-size: 0.75rem;
+  }
+}
+
+// Animation for line drawing
+@keyframes drawLine {
+  from {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 1000;
+  }
+  to {
+    stroke-dasharray: 1000;
+    stroke-dashoffset: 0;
+  }
+}
+
+.chart-line {
+  animation: drawLine 2s ease-in-out;
+}
+
+// Tooltip styling
+.chart-tooltip {
+  background: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  font-size: 0.75rem;
+  pointer-events: none;
+  z-index: 10;
+}

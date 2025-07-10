@@ -1,102 +1,153 @@
-<div class="login-container">
-  <div class="login-card">
-    <div class="login-header">
-      <div class="logo">
-        <div class="logo-icon">🌱</div>
-        <h1>Hydronia</h1>
+<div
+  class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 p-4 flex items-center justify-center"
+>
+  <div class="max-w-md w-full space-y-6">
+    <!-- Header -->
+    <div class="text-center space-y-4">
+      <div class="flex items-center justify-center gap-3">
+        <div class="h-12 w-12 text-primary">🌱</div>
+        <h1 class="text-4xl font-bold text-primary">Hydronia</h1>
       </div>
-      <p class="subtitle">Welcome back! Please sign in to your account.</p>
-    </div>
-
-    <form class="login-form" (ngSubmit)="login()" #loginForm="ngForm">
-      <div class="form-group">
-        <label for="username">Username</label>
-        <div class="input-wrapper">
-          <input
-            id="username"
-            type="text"
-            [(ngModel)]="username"
-            name="username"
-            placeholder="Enter your username"
-            required
-            #usernameField="ngModel"
-            [class.error]="usernameField.invalid && usernameField.touched"
-          />
-          <span class="input-icon">👤</span>
-        </div>
-        <div
-          class="error-message"
-          *ngIf="usernameField.invalid && usernameField.touched"
-        >
-          Username is required
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="password">Password</label>
-        <div class="input-wrapper">
-          <input
-            id="password"
-            [type]="showPassword ? 'text' : 'password'"
-            [(ngModel)]="password"
-            name="password"
-            placeholder="Enter your password"
-            required
-            #passwordField="ngModel"
-            [class.error]="passwordField.invalid && passwordField.touched"
-          />
-          <button
-            type="button"
-            class="password-toggle"
-            (click)="togglePasswordVisibility()"
-            tabindex="-1"
-          >
-            {{ showPassword ? "🙈" : "👁️" }}
-          </button>
-        </div>
-        <div
-          class="error-message"
-          *ngIf="passwordField.invalid && passwordField.touched"
-        >
-          Password is required
-        </div>
-      </div>
-
-      <div class="form-options">
-        <label class="checkbox-wrapper">
-          <input type="checkbox" [(ngModel)]="rememberMe" name="rememberMe" />
-          <span class="checkmark"></span>
-          Remember me
-        </label>
-        <a href="#" class="forgot-password">Forgot password?</a>
-      </div>
-
-      <button
-        type="submit"
-        class="login-button"
-        [disabled]="loginForm.invalid || isLoading"
-        [class.loading]="isLoading"
-      >
-        <span *ngIf="!isLoading">Sign In</span>
-        <span *ngIf="isLoading" class="loading-spinner"></span>
-        <span *ngIf="isLoading">Signing in...</span>
-      </button>
-
-      <div class="error-message global-error" *ngIf="loginError">
-        {{ loginError }}
-      </div>
-    </form>
-
-    <div class="login-footer">
-      <p>
-        Don't have an account? <a href="#" class="register-link">Sign up</a>
+      <p class="text-xl text-muted-foreground">
+        IoT-Based Aquaponic Lettuce Monitoring System
+      </p>
+      <p class="text-sm text-muted-foreground max-w-2xl mx-auto">
+        Welcome back! Please sign in to your account.
       </p>
     </div>
-  </div>
 
-  <div class="background-decoration">
-    <div class="decoration-circle circle-1"></div>
-    <div class="decoration-circle circle-2"></div>
-    <div class="decoration-circle circle-3"></div>
+    <!-- Login Card -->
+    <div class="bg-white rounded-lg shadow-lg p-6 space-y-6">
+      <form class="space-y-4" (ngSubmit)="login()" #loginForm="ngForm">
+        <!-- Username Field -->
+        <div class="space-y-2">
+          <label
+            for="username"
+            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >Username</label
+          >
+          <div class="relative">
+            <input
+              id="username"
+              type="text"
+              [(ngModel)]="username"
+              name="username"
+              placeholder="Enter your username"
+              required
+              #usernameField="ngModel"
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
+              [class.border-destructive]="
+                usernameField.invalid && usernameField.touched
+              "
+            />
+            <div
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            >
+              👤
+            </div>
+          </div>
+          <div
+            class="text-sm font-medium text-destructive"
+            *ngIf="usernameField.invalid && usernameField.touched"
+          >
+            Username is required
+          </div>
+        </div>
+
+        <!-- Password Field -->
+        <div class="space-y-2">
+          <label
+            for="password"
+            class="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+            >Password</label
+          >
+          <div class="relative">
+            <input
+              id="password"
+              [type]="showPassword ? 'text' : 'password'"
+              [(ngModel)]="password"
+              name="password"
+              placeholder="Enter your password"
+              required
+              #passwordField="ngModel"
+              class="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 pr-10"
+              [class.border-destructive]="
+                passwordField.invalid && passwordField.touched
+              "
+            />
+            <button
+              type="button"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+              (click)="togglePasswordVisibility()"
+              tabindex="-1"
+            >
+              {{ showPassword ? "🙈" : "👁️" }}
+            </button>
+          </div>
+          <div
+            class="text-sm font-medium text-destructive"
+            *ngIf="passwordField.invalid && passwordField.touched"
+          >
+            Password is required
+          </div>
+        </div>
+
+        <!-- Form Options -->
+        <div class="flex items-center justify-between">
+          <label class="flex items-center space-x-2 text-sm cursor-pointer">
+            <input
+              type="checkbox"
+              [(ngModel)]="rememberMe"
+              name="rememberMe"
+              class="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+            />
+            <span>Remember me</span>
+          </label>
+          <a href="#" class="text-sm text-primary hover:underline"
+            >Forgot password?</a
+          >
+        </div>
+
+        <!-- Submit Button -->
+        <button
+          type="submit"
+          class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 bg-primary text-primary-foreground hover:bg-primary/90 h-10 px-4 py-2 w-full"
+          [disabled]="loginForm.invalid || isLoading"
+        >
+          <span *ngIf="!isLoading">Sign In</span>
+          <div *ngIf="isLoading" class="flex items-center gap-2">
+            <div
+              class="animate-spin rounded-full h-4 w-4 border-b-2 border-primary-foreground"
+            ></div>
+            <span>Signing in...</span>
+          </div>
+        </button>
+
+        <!-- Error Message -->
+        <div
+          class="text-sm font-medium text-destructive text-center"
+          *ngIf="loginError"
+        >
+          {{ loginError }}
+        </div>
+      </form>
+
+      <!-- Footer -->
+      <div class="text-center text-sm text-muted-foreground">
+        <p>
+          Don't have an account?
+          <a href="#" class="text-primary hover:underline font-medium"
+            >Sign up</a
+          >
+        </p>
+      </div>
+    </div>
+
+    <!-- Developer Credits -->
+    <div class="text-center text-sm text-muted-foreground">
+      <p>
+        Developed by: Tan, Robien Lee • Mendoza, Ryu • Valencia, Percival Louis
+      </p>
+    </div>
   </div>
 </div>

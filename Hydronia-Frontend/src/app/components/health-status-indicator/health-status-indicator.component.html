@@ -1,0 +1,100 @@
+<div class="flex items-center gap-4">
+  <!-- Circular Progress Indicator -->
+  <div class="relative" [ngClass]="circleSize">
+    <svg class="w-full h-full transform -rotate-90">
+      <!-- Background circle -->
+      <circle
+        [attr.cx]="size === 'sm' ? 32 : size === 'md' ? 48 : 64"
+        [attr.cy]="size === 'sm' ? 32 : size === 'md' ? 48 : 64"
+        [attr.r]="radius"
+        stroke="#e5e7eb"
+        [attr.stroke-width]="strokeWidth"
+        fill="none"
+        class="opacity-20"
+      />
+
+      <!-- Progress circle -->
+      <circle
+        [attr.cx]="size === 'sm' ? 32 : size === 'md' ? 48 : 64"
+        [attr.cy]="size === 'sm' ? 32 : size === 'md' ? 48 : 64"
+        [attr.r]="radius"
+        [attr.stroke]="strokeColor"
+        [attr.stroke-width]="strokeWidth"
+        fill="none"
+        [attr.stroke-dasharray]="strokeDasharray"
+        [attr.stroke-dashoffset]="0"
+        stroke-linecap="round"
+        class="transition-all duration-1000 ease-out"
+        style="stroke-dashoffset: 0"
+      />
+    </svg>
+
+    <!-- Center content -->
+    <div class="absolute inset-0 flex items-center justify-center">
+      <div class="text-center">
+        <div
+          [ngClass]="
+            size === 'sm' ? 'text-lg' : size === 'md' ? 'text-xl' : 'text-2xl'
+          "
+          class="font-bold"
+          [ngClass]="statusColor"
+        >
+          {{ healthScore }}%
+        </div>
+        <div *ngIf="size !== 'sm'" class="text-xs text-muted-foreground">
+          {{ statusIcon }}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Status Details -->
+  <div *ngIf="showDetails" class="flex-1 space-y-2">
+    <div class="flex items-center gap-2">
+      <span class="text-2xl">{{ statusIcon }}</span>
+      <div>
+        <div class="font-medium" [ngClass]="statusColor">
+          {{ statusText }} Health
+        </div>
+        <div class="text-sm text-muted-foreground">
+          {{ healthScore }}% overall score
+        </div>
+      </div>
+    </div>
+
+    <!-- Health Score Bar -->
+    <div class="space-y-1">
+      <div class="flex justify-between text-xs text-muted-foreground">
+        <span>Health Score</span>
+        <span>{{ healthScore }}/100</span>
+      </div>
+      <div class="w-full bg-gray-200 rounded-full h-2">
+        <div
+          [ngClass]="
+            'h-2 rounded-full transition-all duration-1000 ease-out ' +
+            (healthStatus === 'excellent'
+              ? 'bg-green-500'
+              : healthStatus === 'good'
+              ? 'bg-green-400'
+              : healthStatus === 'moderate'
+              ? 'bg-yellow-500'
+              : 'bg-red-500')
+          "
+          [style.width.%]="healthScore"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Status Badge -->
+    <div class="inline-flex items-center gap-1">
+      <span
+        [ngClass]="
+          'inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 ' +
+          statusBgColor
+        "
+      >
+        {{ statusIcon }} {{ statusText }}
+      </span>
+    </div>
+  </div>
+</div>

@@ -1,12 +1,15 @@
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login',
+  standalone: true,
+  imports: [CommonModule, FormsModule],
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
-  standalone: false,
 })
 export class LoginComponent {
   username = '';
@@ -50,27 +53,17 @@ export class LoginComponent {
   }
 
   private handlePostLoginRouting() {
-    // Wait a moment for user profile to load
-    setTimeout(() => {
-      const userProfile = this.auth.getUserProfile();
-
-      if (!userProfile) {
-        this.loginError = 'Failed to load user profile. Please try again.';
-        return;
-      }
-
-      // If user is a developer, show role selection
-      if (userProfile.permissions.needs_role_selection) {
+    // Wait for user profile to load, then redirect
+    this.auth.loadUserProfile().subscribe({
+      next: (profile) => {
+        console.log('User profile loaded:', profile);
         this.router.navigate(['/role-selection']);
-      }
-      // If user is a farmer, go directly to farmer dashboard
-      else if (userProfile.user.is_farmer) {
-        this.router.navigate(['/farmer-dashboard']);
-      }
-      // Fallback to farmer dashboard
-      else {
-        this.router.navigate(['/farmer-dashboard']);
-      }
-    }, 500);
+      },
+      error: (error) => {
+        console.error('Failed to load user profile:', error);
+        this.loginError = 'Failed to load user profile. Please try again.';
+        this.auth.logout(); // Clear invalid session
+      },
+    });
   }
 }
