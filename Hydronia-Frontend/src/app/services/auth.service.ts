@@ -1,7 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { tap, map } from 'rxjs/operators';
 import { Observable, BehaviorSubject } from 'rxjs';
+
+export interface LoginCredentials {
+  username: string;
+  password: string;
+}
 
 export interface User {
   id: number;
@@ -28,10 +34,12 @@ export interface UserProfile {
 })
 export class AuthService {
   private baseUrl = 'http://localhost:8000/api';
+  private apiUrl = 'http://localhost:8000/api';
   private currentUserSubject = new BehaviorSubject<User | null>(null);
   public currentUser$ = this.currentUserSubject.asObservable();
+  public user$ = this.currentUserSubject.asObservable();
 
-  constructor(private http: HttpClient) {
+  constructor(private http: HttpClient, private router: Router) {
     // Clear any invalid tokens first
     this.clearInvalidTokens();
 
@@ -53,19 +61,46 @@ export class AuthService {
     }
   }
 
-  login(username: string, password: string): Observable<any> {
-    return this.http
-      .post(`${this.baseUrl}/token/`, { username, password })
-      .pipe(
-        tap((res: any) => {
-          localStorage.setItem('access_token', res.access);
-          localStorage.setItem('refresh_token', res.refresh);
-        }),
-        // After successful login, load user profile
-        tap(() => {
-          this.loadUserProfile().subscribe();
-        })
-      );
+  login(credentials: LoginCredentials): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/token/`, credentials).pipe(
+      tap(response => {
+        localStorage.setItem('access_token', response.access);
+        localStorage.setItem('refresh_token', response.refresh);
+        this.setAuthToken(response.access);
+        
+        // Get user profile to determine role and redirect appropriately
+        this.loadUserProfile().subscribe(
+          (profile) => {
+            console.log('Login profile received:', profile);
+            console.log('User role:', profile.user.role);
+            console.log('User is_dev:', profile.user.is_dev);
+            console.log('User is_farmer:', profile.user.is_farmer);
+            
+            this.currentUserSubject.next(profile.user);
+            
+            // Auto-redirect based on role - prioritize FARMER role
+            if (profile.user.role === 'FARMER' && !profile.user.is_dev) {
+              // Farmer-only users go directly to farmer dashboard
+              console.log('Redirecting farmer to dashboard');
+              this.router.navigate(['/farmer-dashboard']);
+            } else if (profile.user.role === 'DEV' || profile.user.is_dev) {
+              // Dev users go to role selection
+              console.log('Redirecting dev to role selection');
+              this.router.navigate(['/role-selection']);
+            } else {
+              // Default fallback for farmers
+              console.log('Default fallback to farmer dashboard');
+              this.router.navigate(['/farmer-dashboard']);
+            }
+          },
+          (error) => {
+            console.error('Error getting user profile:', error);
+            // Fallback to farmer dashboard on error
+            this.router.navigate(['/farmer-dashboard']);
+          }
+        );
+      })
+    );
   }
 
   loadUserProfile(): Observable<UserProfile> {
@@ -98,6 +133,7 @@ export class AuthService {
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('user_profile');
     this.currentUserSubject.next(null);
+    this.router.navigate(['/login']);
   }
 
   isLoggedIn(): boolean {
@@ -121,6 +157,10 @@ export class AuthService {
       this.logout();
       return false;
     }
+  }
+
+  private setAuthToken(token: string) {
+    // This method can be used to set authorization headers globally if needed
   }
 
   private getAuthHeaders(): HttpHeaders {

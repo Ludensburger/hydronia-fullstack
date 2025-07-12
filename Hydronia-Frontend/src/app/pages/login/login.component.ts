@@ -33,36 +33,16 @@ export class LoginComponent {
     this.isLoading = true;
     this.loginError = '';
 
-    this.auth.login(this.username, this.password).subscribe({
+    this.auth.login({ username: this.username, password: this.password }).subscribe({
       next: () => {
         console.log('Login successful');
         this.isLoading = false;
-
-        // Hide this after Testing
-        console.log('Access Token: ', localStorage.getItem('access_token'));
-
-        // Handle role-based routing
-        this.handlePostLoginRouting();
+        // Note: Auth service handles the redirect automatically based on role
       },
       error: (err) => {
         console.error('Login failed', err);
         this.isLoading = false;
         this.loginError = 'Invalid username or password. Please try again.';
-      },
-    });
-  }
-
-  private handlePostLoginRouting() {
-    // Wait for user profile to load, then redirect
-    this.auth.loadUserProfile().subscribe({
-      next: (profile) => {
-        console.log('User profile loaded:', profile);
-        this.router.navigate(['/role-selection']);
-      },
-      error: (error) => {
-        console.error('Failed to load user profile:', error);
-        this.loginError = 'Failed to load user profile. Please try again.';
-        this.auth.logout(); // Clear invalid session
       },
     });
   }

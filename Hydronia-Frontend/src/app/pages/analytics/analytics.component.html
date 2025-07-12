@@ -59,17 +59,17 @@
     </div>
 
     <!-- Metrics Overview -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
       <div class="bg-white rounded-lg shadow-lg p-6">
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-muted-foreground">pH Level</p>
             <p class="text-2xl font-bold">{{ averageMetrics?.pH }}</p>
           </div>
-          <div class="flex items-center gap-1">
-            <span [class]="getTrendColor(getTrend('pH'))">
-              {{ getTrendIcon(getTrend("pH")) }}
-            </span>
+          <div class="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="text-blue-600">
+              <path d="M21 7 6.82 21.18a2.83 2.83 0 0 1-3.99-.01 2.83 2.83 0 0 1 0-4L17 3m-1-1 6 6m-10 8H4"/>
+            </svg>
           </div>
         </div>
         <div class="mt-2">
@@ -83,29 +83,7 @@
         </div>
       </div>
 
-      <div class="bg-white rounded-lg shadow-lg p-6">
-        <div class="flex items-center justify-between">
-          <div>
-            <p class="text-sm font-medium text-muted-foreground">EC Level</p>
-            <p class="text-2xl font-bold">{{ averageMetrics?.ec }}</p>
-          </div>
-          <div class="flex items-center gap-1">
-            <span [class]="getTrendColor(getTrend('ec'))">
-              {{ getTrendIcon(getTrend("ec")) }}
-            </span>
-          </div>
-        </div>
-        <div class="mt-2">
-          <div class="w-full bg-gray-200 rounded-full h-2">
-            <div
-              class="bg-yellow-500 h-2 rounded-full"
-              [style.width.%]="(+averageMetrics?.ec! / 3) * 100"
-            ></div>
-          </div>
-          <p class="text-xs text-muted-foreground mt-1">Optimal: 1.5-2.0</p>
-        </div>
-      </div>
-
+      
       <div class="bg-white rounded-lg shadow-lg p-6">
         <div class="flex items-center justify-between">
           <div>
@@ -114,10 +92,10 @@
               {{ averageMetrics?.temperature }}°C
             </p>
           </div>
-          <div class="flex items-center gap-1">
-            <span [class]="getTrendColor(getTrend('temperature'))">
-              {{ getTrendIcon(getTrend("temperature")) }}
-            </span>
+          <div class="h-12 w-12 bg-red-100 rounded-lg flex items-center justify-center">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="text-red-600">
+              <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0"/>
+            </svg>
           </div>
         </div>
         <div class="mt-2">
@@ -137,10 +115,11 @@
             <p class="text-sm font-medium text-muted-foreground">Humidity</p>
             <p class="text-2xl font-bold">{{ averageMetrics?.humidity }}%</p>
           </div>
-          <div class="flex items-center gap-1">
-            <span [class]="getTrendColor(getTrend('humidity'))">
-              {{ getTrendIcon(getTrend("humidity")) }}
-            </span>
+          <div class="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center">
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="text-teal-600">
+  <path d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05"/>
+  <path d="M12.56 6.6A11 11 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"/>
+</svg>
           </div>
         </div>
         <div class="mt-2">
@@ -157,26 +136,26 @@
       <div class="bg-white rounded-lg shadow-lg p-6">
         <div class="flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-muted-foreground">TPH</p>
-            <p class="text-2xl font-bold">{{ averageMetrics?.tph }}</p>
+        <p class="text-sm font-medium text-muted-foreground">TPH</p>
+        <p class="text-2xl font-bold">{{ averageMetrics?.tph }}</p>
           </div>
-          <div class="flex items-center gap-1">
-            <span [class]="getTrendColor(getTrend('tph'))">
-              {{ getTrendIcon(getTrend("tph")) }}
-            </span>
+          <div class="h-12 w-12 bg-yellow-100 rounded-lg flex items-center justify-center">
+    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="text-yellow-600">
+      <path d="M10 2v7.527a2 2 0 0 1-.211.896L4.72 20.55a1 1 0 0 0 .9 1.45h12.76a1 1 0 0 0 .9-1.45l-5.069-10.127A2 2 0 0 1 14 9.527V2M8.5 2h7M7 16h10"/>
+    </svg>
           </div>
         </div>
         <div class="mt-2">
           <div class="w-full bg-gray-200 rounded-full h-2">
-            <div
-              class="bg-purple-500 h-2 rounded-full"
-              [style.width.%]="(+averageMetrics?.tph! / 0.05) * 100"
-            ></div>
+        <div
+          class="bg-yellow-500 h-2 rounded-full"
+          [style.width.%]="(+averageMetrics?.tph! / 0.05) * 100"
+        ></div>
           </div>
           <p class="text-xs text-muted-foreground mt-1">Optimal: 0.015-0.025</p>
         </div>
       </div>
-    </div>
+        </div>
 
     <!-- Charts Section -->
     <div class="grid lg:grid-cols-2 gap-6">

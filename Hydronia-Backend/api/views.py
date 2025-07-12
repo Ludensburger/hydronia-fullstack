@@ -40,10 +40,10 @@ class SensorReadingCreateAPIView(generics.CreateAPIView):
 class SensorReadingListAPIView(generics.ListAPIView):
     serializer_class = SensorReadingSerializer
 
-    def get_queryset(self):
+    def get_queryset(self): # Currently set at recent 10 readings
         row = self.kwargs['row']
         cycle = self.kwargs['cycle']
-        return SensorReading.objects.filter(row=row, cycle=cycle).order_by('-timestamp')
+        return SensorReading.objects.filter(row=row, cycle=cycle).order_by('-timestamp')[:10]
 
 # POST /images/
 class PlantImageUploadAPIView(generics.CreateAPIView):
@@ -59,3 +59,18 @@ class PlantImageListAPIView(generics.ListAPIView):
         row = self.kwargs['row']
         cycle = self.kwargs['cycle']
         return PlantImage.objects.filter(row=row, cycle=cycle).order_by('-timestamp')
+
+# POST /logs/
+class ManualLogCreateAPIView(generics.CreateAPIView):
+    queryset = ManualLog.objects.all()
+    serializer_class = ManualLogSerializer
+    parser_classes = (MultiPartParser, FormParser)
+
+# GET /logs/<int:row>/<int:cycle/
+class ManualLogListAPIView(generics.ListAPIView):
+    serializer_class = ManualLogSerializer
+
+    def get_queryset(self):
+        row = self.kwargs['row']
+        cycle = self.kwargs['cycle']
+        return ManualLog.objects.filter(row=row, cycle=cycle).order_by('-timestamp')

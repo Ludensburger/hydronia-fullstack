@@ -47,6 +47,9 @@ export class RoleSelectionComponent implements OnInit {
     console.log('Auth service exists:', !!this.auth);
     console.log('Router exists:', !!this.router);
     console.log('Is logged in:', this.auth.isLoggedIn());
+    
+    // Add an alert to make it super obvious if this method is called
+    // alert(`selectRole called with: ${role}`);
 
     const user = this.auth.getCurrentUser();
     console.log('Current user:', user);
@@ -54,7 +57,7 @@ export class RoleSelectionComponent implements OnInit {
 
     if (!user) {
       console.log('ERROR: No user found, cannot navigate');
-      alert('No user data found. Please try logging in again.');
+      // alert('No user data found. Please try logging in again.');
       return;
     }
 
@@ -99,8 +102,5 @@ export class RoleSelectionComponent implements OnInit {
     this.router.navigate(['/login']);
   }
 
-  testClick() {
-    console.log('Test click works!');
-    alert('Click detected!');
-  }
+
 }

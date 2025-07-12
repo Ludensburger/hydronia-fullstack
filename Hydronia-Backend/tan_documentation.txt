@@ -8,19 +8,21 @@ Tuesday, July 8, 2025
 
 Wednesday, July 9, 2025
 •	Implement POST /sensors/ & POST /images/ endpoints (Assigned: Tan; Must-Have Areas: Backend Architecture, Sensor Monitoring Module, Visual Monitoring Module)
+•	Implement GET /sensors/{row}/{cycle} & GET /images/{row}/{cycle} (Assigned: Tan; Must-Have Areas: Backend Architecture, Data Management Module)
 •	Create Django models & run migrations (Assigned: Tan; Must-Have Areas: Data Management Module)
 •	Configure local storage stub for image uploads (Assigned: Tan; Must-Have Areas: Visual Monitoring Module)
 •	Smoke-test endpoints with curl/Postman (Assigned: Tan; Must-Have Areas: System Admin/Developer)
 
 Thursday, July 10, 2025
-•	Implement GET /sensors/{row}/{cycle} & GET /images/{row}/{cycle} (Assigned: Tan; Must-Have Areas: Backend Architecture, Data Management Module)
-•	Write ORM/raw SQL queries for recent entries (Assigned: Tan; Must-Have Areas: Data Management Module)
+•	Write ORM (Django data fetcher) queries for recent entries (Assigned: Tan; Must-Have Areas: Data Management Module)
 •	Annotate readings with threshold flags (in_range) (Assigned: Tan; Must-Have Areas: Alerting & Notification Module)
 •	Update Swagger/OpenAPI with new routes & README testing guide (Assigned: Tan; Must-Have Areas: System Admin/Developer)
+•   Implement POST /logs/ & GET /logs/{row}/{cycle}
+•   Start finding lettuce dataset online
+•   Study CNN and Fuzzy Logic 
 
 Friday, July 11, 2025
 •   Test connection with frontend.
-•   Start finding lettuce dataset online
 •   Applying machine learning with online dataset temporarily
 
 Fuzzy Logic Integration

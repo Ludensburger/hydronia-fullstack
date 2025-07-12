@@ -1,42 +1,60 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, Router, ActivatedRouteSnapshot } from '@angular/router';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { AuthService } from '../services/auth.service';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class RoleGuard implements CanActivate {
   constructor(private authService: AuthService, private router: Router) {}
 
-  canActivate(route: ActivatedRouteSnapshot): boolean {
-    const expectedRole = route.data['expectedRole'];
-    const user = this.authService.getCurrentUser();
+  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> {
+    return this.authService.user$.pipe(
+      map(user => {
+        if (!user) {
+          this.router.navigate(['/login']);
+          return false;
+        }
 
-    console.log('Role Guard - Expected role:', expectedRole);
-    console.log('Role Guard - Current user:', user);
+        const requiredRole = route.data?.['role'];
+        
+        if (!requiredRole) {
+          return true;
+        }
 
-    if (!this.authService.isLoggedIn()) {
-      this.router.navigate(['/login']);
-      return false;
-    }
+        // Handle multi-role access (role selection page)
+        if (requiredRole === 'multi-role') {
+          // Only users with dev privileges can access role selection
+          if (user.role === 'DEV' || user.is_dev) {
+            return true;
+          } else {
+            // Farmer-only users should go directly to farmer dashboard
+            this.router.navigate(['/farmer-dashboard']);
+            return false;
+          }
+        }
 
-    if (!user) {
-      this.router.navigate(['/login']);
-      return false;
-    }
+        // Check if user has required role
+        if (requiredRole === 'farmer' && (user.role === 'FARMER' || user.is_dev)) {
+          // Both farmers and devs can access farmer dashboard
+          return true;
+        }
+        
+        if (requiredRole === 'dev' && (user.role === 'DEV' || user.is_dev)) {
+          return true;
+        }
 
-    // For dev users, allow access to both farmer and dev views
-    if (user.is_dev) {
-      return true;
-    }
-
-    // For farmer users, only allow access to farmer views
-    if (expectedRole === 'farmer' && user.is_farmer) {
-      return true;
-    }
-
-    // If user doesn't have permission, redirect to role selection
-    this.router.navigate(['/role-selection']);
-    return false;
+        // If user doesn't have required role, redirect appropriately
+        if (user.role === 'FARMER' && !user.is_dev) {
+          this.router.navigate(['/farmer-dashboard']);
+        } else {
+          this.router.navigate(['/role-selection']);
+        }
+        
+        return false;
+      })
+    );
   }
 }

@@ -1,0 +1,20 @@
+# Django Framework
+Django==5.2.4
+
+# Django REST Framework for API development
+djangorestframework==3.15.2
+
+# JWT Authentication
+djangorestframework-simplejwt==5.3.0
+
+# CORS headers for frontend-backend communication
+django-cors-headers==4.3.1
+
+# Image processing for PlantImage model
+Pillow==10.4.0
+
+# Python timezone support (usually comes with Python but explicitly listed)
+pytz==2024.1
+
+# Additional useful packages for development
+python-decouple==3.8  # For environment variables management
