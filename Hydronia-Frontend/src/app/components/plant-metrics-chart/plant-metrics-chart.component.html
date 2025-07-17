@@ -11,90 +11,25 @@
     </select>
   </div>
 
-  <div class="relative" [style.height]="height">
-    <div
-      class="absolute inset-0 flex items-center justify-center"
-      *ngIf="chartData.length === 0"
-    >
-      <div class="text-center text-muted-foreground">
-        <div class="text-2xl mb-2">📊</div>
-        <p class="text-sm">No data available</p>
-      </div>
-    </div>
+  <div
+    *ngIf="data.length === 0"
+    class="text-center text-muted-foreground py-12"
+  >
+    <div class="text-2xl mb-2">📊</div>
+    <p class="text-sm">No data available</p>
+  </div>
 
-    <div class="absolute inset-0" *ngIf="chartData.length > 0">
-      <!-- Chart Container -->
-      <div class="relative w-full h-full">
-        <!-- Y-axis labels -->
-        <div
-          class="absolute left-0 top-0 bottom-0 w-12 flex flex-col justify-between text-xs text-muted-foreground"
-        >
-          <span>{{ formatValue(maxValue) }}</span>
-          <span>{{ formatValue((maxValue + minValue) / 2) }}</span>
-          <span>{{ formatValue(minValue) }}</span>
-        </div>
-
-        <!-- Chart area -->
-        <div class="ml-12 mr-4 h-full relative">
-          <svg class="w-full h-full">
-            <!-- Grid lines -->
-            <defs>
-              <pattern
-                id="grid"
-                width="10"
-                height="10"
-                patternUnits="userSpaceOnUse"
-              >
-                <path
-                  d="M 10 0 L 0 0 0 10"
-                  fill="none"
-                  stroke="#e5e7eb"
-                  stroke-width="1"
-                />
-              </pattern>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#grid)" opacity="0.3" />
-
-            <!-- Data line -->
-            <path
-              *ngIf="chartData.length > 1"
-              [attr.d]="getLinePath()"
-              [attr.stroke]="getStrokeColor(currentMetric.color)"
-              stroke-width="2"
-              fill="none"
-              class="drop-shadow-sm"
-            />
-
-            <!-- Data points -->
-            <circle
-              *ngFor="let point of chartData; let i = index"
-              [attr.cx]="getPointPosition(point.value, i).x + '%'"
-              [attr.cy]="getPointPosition(point.value, i).y + '%'"
-              r="4"
-              [attr.fill]="getStrokeColor(currentMetric.color)"
-              class="drop-shadow-sm hover:r-6 transition-all cursor-pointer"
-              [attr.title]="
-                formatValue(point.value) +
-                ' at ' +
-                (point.timestamp | date : 'short')
-              "
-            />
-          </svg>
-        </div>
-
-        <!-- X-axis labels -->
-        <div
-          class="absolute bottom-0 left-12 right-4 flex justify-between text-xs text-muted-foreground"
-        >
-          <span *ngIf="chartData.length > 0">{{
-            chartData[0].timestamp | date : "short"
-          }}</span>
-          <span *ngIf="chartData.length > 1">{{
-            chartData[chartData.length - 1].timestamp | date : "short"
-          }}</span>
-        </div>
-      </div>
-    </div>
+  <div *ngIf="data.length > 0">
+    <apx-chart
+      [series]="chartSeries"
+      [chart]="chartOptions.chart"
+      [xaxis]="chartOptions.xaxis"
+      [yaxis]="chartOptions.yaxis"
+      [stroke]="chartOptions.stroke"
+      [colors]="chartOptions.colors"
+      [tooltip]="chartOptions.tooltip"
+      [dataLabels]="chartOptions.dataLabels"
+    ></apx-chart>
   </div>
 
   <!-- Chart Legend -->
@@ -107,7 +42,7 @@
       <span class="text-sm">{{ currentMetric.label }}</span>
     </div>
     <div class="text-sm text-muted-foreground">
-      {{ chartData.length }} data points
+      {{ data.length }} data points
     </div>
   </div>
 </div>
