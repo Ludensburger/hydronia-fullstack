@@ -164,33 +164,63 @@
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
       <div class="bg-card border border-border rounded-lg shadow-sm">
         <div class="p-6">
-          <div class="flex items-center justify-between">
+          <div class="flex items-center justify-between gap-4">
             <div>
-              <p class="text-sm font-medium text-muted-foreground">pH Level</p>
-              <p
-                class="text-2xl font-bold"
-                [ngClass]="{
-                  'text-green-600': isPhOptimal(),
-                  'text-red-600': isPhCritical(),
-                }"
-              >
-                {{ sensorData?.ph }}
+              <p class="text-sm font-medium text-muted-foreground mb-1">
+                pH Level
+              </p>
+              <p class="text-2xl font-bold mb-1">
+                <span
+                  class="inline-flex items-center gap-2 whitespace-nowrap"
+                  [ngClass]="getPhColor(sensorData?.ph)"
+                >
+                  <ng-container *ngIf="getPhIcon(sensorData?.ph) === 'down'">
+                    <svg
+                      class="h-5 w-5 text-yellow-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                      />
+                    </svg>
+                  </ng-container>
+                  <ng-container *ngIf="getPhIcon(sensorData?.ph) === 'up'">
+                    <svg
+                      class="h-5 w-5 text-purple-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 7l4-4m0 0l4 4m-4-4v18"
+                      />
+                    </svg>
+                  </ng-container>
+                  {{ sensorData?.ph }}
+                </span>
               </p>
               <p class="text-xs text-green-600">Optimal range: 6.0-6.5</p>
             </div>
             <div
-              class="h-12 w-12 bg-blue-100 rounded-lg flex items-center justify-center"
+              class="h-14 w-14 bg-blue-100 rounded-lg flex items-center justify-center"
             >
               <svg
+                class="h-6 w-6 text-blue-600"
                 xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
                 fill="none"
                 stroke="currentColor"
                 stroke-linecap="round"
                 stroke-linejoin="round"
                 stroke-width="2"
-                class="text-blue-600"
+                viewBox="0 0 24 24"
               >
                 <path
                   d="M21 7 6.82 21.18a2.83 2.83 0 0 1-3.99-.01 2.83 2.83 0 0 1 0-4L17 3m-1-1 6 6m-10 8H4"
@@ -205,17 +235,46 @@
         <div class="p-6">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm font-medium text-muted-foreground">TPH (ppm)</p>
-              <p
-                class="text-2xl font-bold"
-                [ngClass]="{
-                  'text-green-600': isTphOptimal(),
-                  'text-red-600': isTphCritical(),
-                }"
-              >
-                {{ sensorData?.tph }}
+              <p class="text-sm font-medium text-muted-foreground mb-1">TPH</p>
+              <p class="text-2xl font-bold mb-1">
+                <span
+                  class="inline-flex items-center gap-2 whitespace-nowrap"
+                  [ngClass]="getTphColor(sensorData?.tph)"
+                >
+                  <ng-container *ngIf="getTphIcon(sensorData?.tph) === 'down'">
+                    <svg
+                      class="h-5 w-5 text-amber-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                      />
+                    </svg>
+                  </ng-container>
+                  <ng-container *ngIf="getTphIcon(sensorData?.tph) === 'up'">
+                    <svg
+                      class="h-5 w-5 text-pink-400"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 7l4-4m0 0l4 4m-4-4v18"
+                      />
+                    </svg>
+                  </ng-container>
+                  {{ sensorData?.tph }}
+                </span>
               </p>
-              <p class="text-xs text-green-600">Safe: &lt;0.1</p>
+              <p class="text-xs text-green-600">Safe: 500–800</p>
             </div>
             <div
               class="h-12 w-12 bg-yellow-100 rounded-lg flex items-center justify-center"
@@ -244,15 +303,46 @@
         <div class="p-6">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm font-medium text-muted-foreground">EC Level</p>
-              <p
-                class="text-2xl font-bold"
-                [ngClass]="{
-                  'text-green-600': isEcOptimal(),
-                  'text-red-600': isEcCritical(),
-                }"
-              >
-                {{ sensorData?.ec }} mS/cm
+              <p class="text-sm font-medium text-muted-foreground mb-1">
+                EC Level
+              </p>
+              <p class="text-2xl font-bold mb-1">
+                <span
+                  class="inline-flex items-center gap-2 whitespace-nowrap"
+                  [ngClass]="getEcColor(sensorData?.ec)"
+                >
+                  <ng-container *ngIf="getEcIcon(sensorData?.ec) === 'down'">
+                    <svg
+                      class="h-5 w-5 text-orange-500"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                      />
+                    </svg>
+                  </ng-container>
+                  <ng-container *ngIf="getEcIcon(sensorData?.ec) === 'up'">
+                    <svg
+                      class="h-5 w-5 text-violet-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 7l4-4m0 0l4 4m-4-4v18"
+                      />
+                    </svg>
+                  </ng-container>
+                  {{ sensorData?.ec }} mS/cm
+                </span>
               </p>
               <p class="text-xs text-green-600">Optimal: 1.2-2.2 mS/cm</p>
             </div>
@@ -260,6 +350,7 @@
               class="h-12 w-12 bg-green-100 rounded-lg flex items-center justify-center"
             >
               <svg
+                class="h-4 w-4 text-blue-500"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -284,14 +375,47 @@
               <p class="text-sm font-medium text-muted-foreground">
                 Temperature
               </p>
-              <p
-                class="text-2xl font-bold"
-                [ngClass]="{
-                  'text-green-600': isTempOptimal(),
-                  'text-red-600': isTempCritical(),
-                }"
-              >
-                {{ sensorData?.temperature }}°C
+              <p class="text-2xl font-bold">
+                <span
+                  class="inline-flex items-center gap-1 whitespace-nowrap"
+                  [ngClass]="getTempColor(sensorData?.temperature)"
+                >
+                  <ng-container
+                    *ngIf="getTempIcon(sensorData?.temperature) === 'down'"
+                  >
+                    <svg
+                      class="h-4 w-4 text-blue-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                      />
+                    </svg>
+                  </ng-container>
+                  <ng-container
+                    *ngIf="getTempIcon(sensorData?.temperature) === 'up'"
+                  >
+                    <svg
+                      class="h-4 w-4 text-red-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 7l4-4m0 0l4 4m-4-4v18"
+                      />
+                    </svg>
+                  </ng-container>
+                  {{ sensorData?.temperature }}°C
+                </span>
               </p>
               <p class="text-xs text-green-600">Optimal: 20-25°C</p>
             </div>
@@ -299,6 +423,7 @@
               class="h-12 w-12 bg-red-100 rounded-lg flex items-center justify-center"
             >
               <svg
+                class="h-4 w-4 text-blue-500"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -321,14 +446,47 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-medium text-muted-foreground">Humidity</p>
-              <p
-                class="text-2xl font-bold"
-                [ngClass]="{
-                  'text-green-600': isHumidityOptimal(),
-                  'text-red-600': isHumidityCritical(),
-                }"
-              >
-                {{ sensorData?.humidity }}%
+              <p class="text-2xl font-bold">
+                <span
+                  class="inline-flex items-center gap-1 whitespace-nowrap"
+                  [ngClass]="getHumidityColor(sensorData?.humidity)"
+                >
+                  <ng-container
+                    *ngIf="getHumidityIcon(sensorData?.humidity) === 'down'"
+                  >
+                    <svg
+                      class="h-4 w-4 text-red-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M16 17l-4 4m0 0l-4-4m4 4V3"
+                      />
+                    </svg>
+                  </ng-container>
+                  <ng-container
+                    *ngIf="getHumidityIcon(sensorData?.humidity) === 'up'"
+                  >
+                    <svg
+                      class="h-4 w-4 text-blue-600"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M8 7l4-4m0 0l4 4m-4-4v18"
+                      />
+                    </svg>
+                  </ng-container>
+                  {{ sensorData?.humidity }}%
+                </span>
               </p>
               <p class="text-xs text-green-600">Optimal: 60-70%</p>
             </div>
@@ -336,6 +494,7 @@
               class="h-12 w-12 bg-teal-100 rounded-lg flex items-center justify-center"
             >
               <svg
+                class="h-4 w-4 text-blue-500"
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
                 height="24"
@@ -410,17 +569,13 @@
             <app-plant-metrics-chart
               [data]="historicalSensorData"
               [selectedMetric]="selectedMetric"
-              [title]="'Historical Sensor Data - ' + selectedRow.toUpperCase()"
+              [title]="
+                'Historical Sensor Data (Duplicate) - ' +
+                selectedRow.toUpperCase()
+              "
               [height]="'260px'"
             ></app-plant-metrics-chart>
           </div>
-          <!-- <div class="p-6">
-            <app-plant-metrics-multichart
-              [data]="historicalSensorData"
-              [title]="'All Sensor Metrics - ' + selectedRow.toUpperCase()"
-              [height]="'260px'"
-            ></app-plant-metrics-multichart>
-          </div> -->
         </div>
 
         <!-- Images Tab -->
@@ -530,47 +685,72 @@
         </div>
 
         <!-- Alerts Tab -->
-        <div *ngIf="activeTab === 'alerts'" class="space-y-4">
-          <div
-            *ngFor="let alert of alerts"
-            class="border-l-4 border-l-orange-500 bg-orange-50 p-4 rounded-r-lg"
-          >
-            <div class="flex justify-between items-start">
-              <div>
-                <div class="flex items-center gap-2 mb-1">
-                  <svg
-                    class="h-4 w-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      stroke-linecap="round"
-                      stroke-linejoin="round"
-                      stroke-width="2"
-                      d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
-                    />
-                  </svg>
-                  <span class="font-medium">{{ alert.title }}</span>
-                  <span
-                    [class]="
-                      alert.severity === 'high'
-                        ? 'bg-red-100 text-red-800'
-                        : 'bg-yellow-100 text-yellow-800'
-                    "
-                    class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
-                  >
-                    {{ alert.severity }}
-                  </span>
-                </div>
-                <p class="text-sm text-gray-700">{{ alert.description }}</p>
-                <p class="text-xs text-gray-500 mt-1">{{ alert.timestamp }}</p>
-              </div>
-              <button
-                class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium bg-white hover:bg-gray-50"
+        <div
+          *ngIf="activeTab === 'alerts'"
+          class="bg-card border border-border rounded-lg shadow-sm"
+        >
+          <div class="p-6 border-b border-border">
+            <h3 class="text-lg font-semibold flex items-center gap-2">
+              <svg
+                class="h-5 w-5"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
               >
-                Acknowledge
-              </button>
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                />
+              </svg>
+              Alerts & Notifications
+            </h3>
+          </div>
+          <div class="p-6 space-y-4">
+            <div
+              *ngFor="let alert of alerts"
+              class="border-l-4 border-l-orange-500 bg-orange-50 p-4 rounded-r-lg"
+            >
+              <div class="flex justify-between items-start">
+                <div>
+                  <div class="flex items-center gap-2 mb-1">
+                    <svg
+                      class="h-4 w-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L3.732 16.5c-.77.833.192 2.5 1.732 2.5z"
+                      />
+                    </svg>
+                    <span class="font-medium">{{ alert.title }}</span>
+                    <span
+                      [class]="
+                        alert.severity === 'high'
+                          ? 'bg-red-100 text-red-800'
+                          : 'bg-yellow-100 text-yellow-800'
+                      "
+                      class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                    >
+                      {{ alert.severity }}
+                    </span>
+                  </div>
+                  <p class="text-sm text-gray-700">{{ alert.description }}</p>
+                  <p class="text-xs text-gray-500 mt-1">
+                    {{ alert.timestamp }}
+                  </p>
+                </div>
+                <button
+                  class="px-3 py-1 border border-gray-300 rounded-md text-sm font-medium bg-white hover:bg-gray-50"
+                >
+                  Acknowledge
+                </button>
+              </div>
             </div>
           </div>
         </div>
