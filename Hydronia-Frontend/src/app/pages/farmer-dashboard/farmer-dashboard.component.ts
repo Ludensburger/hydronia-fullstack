@@ -4,25 +4,137 @@ import { AuthService } from '../../services/auth.service';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-
 import { PlantMetricsChartComponent } from '../../components/plant-metrics-chart/plant-metrics-chart.component';
+import { PlantMetricsMultiChartComponent } from '../../components/plant-metrics-multichart/plant-metrics-multichart.component';
 import { NgApexchartsModule } from 'ng-apexcharts';
-
 import type {
   SensorData,
   Alert,
   Prediction,
   PlantImage,
 } from '../../types/hydronia';
-
 @Component({
   selector: 'app-farmer-dashboard',
   standalone: true,
-  imports: [CommonModule, PlantMetricsChartComponent, NgApexchartsModule],
+  imports: [CommonModule, PlantMetricsChartComponent, PlantMetricsMultiChartComponent, NgApexchartsModule],
   templateUrl: './farmer-dashboard.component.html',
   styleUrls: ['./farmer-dashboard.component.scss'],
 })
 export class FarmerDashboardComponent implements OnInit {
+  // Metric display options
+  metricDisplayMode: 'latest' | 'average' | 'recent5' | 'recent10' | 'custom' = 'latest';
+  customMetricCount: number = 5;
+  // Get value for a metric based on display mode
+  getMetricValue(metric: keyof SensorData): number | null {
+    if (!this.historicalSensorData.length) return null;
+    let data = this.historicalSensorData;
+    let count = 0;
+    if (this.metricDisplayMode === 'latest') {
+      const val = data[data.length - 1]?.[metric];
+      return typeof val === 'number' ? val : null;
+    }
+    if (this.metricDisplayMode === 'recent5') count = 5;
+    else if (this.metricDisplayMode === 'recent10') count = 10;
+    else if (this.metricDisplayMode === 'custom') count = this.customMetricCount;
+    if (count > 0) data = data.slice(-count);
+    const values = data.map(d => d[metric]).filter(v => typeof v === 'number');
+    if (!values.length) return null;
+    return values.reduce((a, b) => a + (b as number), 0) / values.length;
+  }
+  // Returns the color (as a CSS color string) for a given metric key, using the value from getMetricValue
+  getMetricColor(metric: keyof SensorData): string {
+    const val = this.getMetricValue(metric);
+    switch (metric) {
+      case 'ph':
+        return val == null ? '' : val < 6.0 ? '#dc2626' : val > 6.5 ? '#2563eb' : '#16a34a';
+      case 'temperature':
+        return val == null ? '' : val < 20 ? '#dc2626' : val > 25 ? '#2563eb' : '#16a34a';
+      case 'humidity':
+        return val == null ? '' : val < 60 ? '#dc2626' : val > 70 ? '#2563eb' : '#16a34a';
+      case 'tph':
+        return val == null ? '' : val < 0.1 ? '#16a34a' : '#2563eb';
+      case 'ec':
+        return val == null ? '' : val < 1.2 ? '#dc2626' : val > 2.2 ? '#2563eb' : '#16a34a';
+      default:
+        return '';
+    }
+  }
+  // Returns the optimal/safe range label for a given metric key
+  getMetricRangeLabel(metric: keyof SensorData): string {
+    switch (metric) {
+      case 'ph':
+        return 'Optimal: 6.0-6.5';
+      case 'temperature':
+        return 'Optimal: 20-25°C';
+      case 'humidity':
+        return 'Optimal: 60-70%';
+      case 'tph':
+        return 'Safe: <0.1';
+      case 'ec':
+        return 'Optimal: 1.2-2.2 mS/cm';
+      default:
+        return '';
+    }
+  }
+  // Color and icon helpers for each metric
+  getPhColor(val: number|null): string {
+    if (val == null) return '';
+    if (val < 6.0) return 'text-red-600';
+    if (val > 6.5) return 'text-blue-600';
+    return 'text-green-600';
+  }
+  getPhIcon(val: number|null): 'down'|'up'|null {
+    if (val == null) return null;
+    if (val < 6.0) return 'down';
+    if (val > 6.5) return 'up';
+    return null;
+  }
+  getTempColor(val: number|null): string {
+    if (val == null) return '';
+    if (val < 20) return 'text-red-600';
+    if (val > 25) return 'text-blue-600';
+    return 'text-green-600';
+  }
+  getTempIcon(val: number|null): 'down'|'up'|null {
+    if (val == null) return null;
+    if (val < 20) return 'down';
+    if (val > 25) return 'up';
+    return null;
+  }
+  getHumidityColor(val: number|null): string {
+    if (val == null) return '';
+    if (val < 60) return 'text-red-600';
+    if (val > 70) return 'text-blue-600';
+    return 'text-green-600';
+  }
+  getHumidityIcon(val: number|null): 'down'|'up'|null {
+    if (val == null) return null;
+    if (val < 60) return 'down';
+    if (val > 70) return 'up';
+    return null;
+  }
+  getTphColor(val: number|null): string {
+    if (val == null) return '';
+    if (val < 0.1) return 'text-green-600';
+    return 'text-blue-600';
+  }
+  getTphIcon(val: number|null): 'down'|'up'|null {
+    if (val == null) return null;
+    if (val < 0.1) return null;
+    return 'up';
+  }
+  getEcColor(val: number|null): string {
+    if (val == null) return '';
+    if (val < 1.2) return 'text-red-600';
+    if (val > 2.2) return 'text-blue-600';
+    return 'text-green-600';
+  }
+  getEcIcon(val: number|null): 'down'|'up'|null {
+    if (val == null) return null;
+    if (val < 1.2) return 'down';
+    if (val > 2.2) return 'up';
+    return null;
+  }
   // For PlantMetricsChartComponent
   historicalSensorData: SensorData[] = [];
   selectedMetric: string = 'pH';
@@ -33,9 +145,7 @@ export class FarmerDashboardComponent implements OnInit {
   user$!: Observable<any>;
   selectedRow = 'row-1';
   activeTab = 'monitoring';
-
   rows = ['Row 1', 'Row 2', 'Row 3', 'Row 4'];
-
   tabs = [
     { id: 'monitoring', label: 'Live Monitoring' },
     { id: 'images', label: 'Plant Images' },
@@ -43,9 +153,7 @@ export class FarmerDashboardComponent implements OnInit {
     { id: 'predictions', label: 'Predictions' },
     { id: 'logs', label: 'Manual Logs' },
   ];
-
   sensorData: SensorData | null = null;
-
   alerts: Alert[] = [
     {
       id: '1',
@@ -67,7 +175,6 @@ export class FarmerDashboardComponent implements OnInit {
       acknowledged: false,
     },
   ];
-
   predictions: Prediction[] = [
     {
       type: 'nutrient_depletion',
@@ -87,7 +194,6 @@ export class FarmerDashboardComponent implements OnInit {
       ],
     },
   ];
-
   // For multi-metric chart toggles
   allMetrics = [
     { key: 'ph', label: 'pH', color: '#3b82f6' },
@@ -97,25 +203,21 @@ export class FarmerDashboardComponent implements OnInit {
     { key: 'tph', label: 'TPH', color: '#eab308' },
   ];
   visibleMetrics = new Set(this.allMetrics.map((m) => m.key));
-
   constructor(
     private auth: AuthService,
     private router: Router,
     private api: ApiService
   ) {}
-
   // Refresh button handler
   public refreshDashboard() {
     this.fetchAllData();
     this.fetchHistoricalSensorData();
   }
-
   ngOnInit() {
     this.user$ = this.auth.currentUser$;
     this.fetchAllData();
     this.fetchHistoricalSensorData();
   }
-
   fetchAllData() {
     const rowNum = this.getSelectedRowNumber();
     const cycleNum = 1; // Default cycle, adjust as needed
@@ -158,7 +260,6 @@ export class FarmerDashboardComponent implements OnInit {
     // Historical sensor data for chart
     this.fetchHistoricalSensorData();
   }
-
   fetchHistoricalSensorData() {
     const rowNum = this.getSelectedRowNumber();
     const cycleNum = 1; // Default cycle, adjust as needed
@@ -188,44 +289,35 @@ export class FarmerDashboardComponent implements OnInit {
       },
     });
   }
-
   getSelectedRowNumber(): number {
     // Assumes selectedRow is like 'row-1', 'row-2', etc.
     const match = this.selectedRow.match(/row-(\d+)/);
     return match ? parseInt(match[1], 10) : 1;
   }
-
   setSelectedRow(row: string) {
     this.selectedRow = row;
     this.fetchAllData();
     this.fetchHistoricalSensorData();
   }
-
   setActiveTab(tab: string) {
     this.activeTab = tab;
   }
-
   getUnacknowledgedAlerts() {
     return this.alerts.filter((alert) => !alert.acknowledged).length;
   }
-
   logout() {
     this.auth.logout();
     this.router.navigate(['/login']);
   }
-
   switchToDevView() {
     this.router.navigate(['/dev-dashboard']);
   }
-
   navigateToPlantGallery() {
     this.router.navigate(['/plant-gallery']);
   }
-
   navigateToAnalytics() {
     this.router.navigate(['/analytics']);
   }
-
   toggleMetric(key: string) {
     if (this.visibleMetrics.has(key)) {
       this.visibleMetrics.delete(key);
@@ -233,21 +325,35 @@ export class FarmerDashboardComponent implements OnInit {
       this.visibleMetrics.add(key);
     }
   }
-
-  getMultiChartSeries() {
-    return this.allMetrics
-      .filter((m) => this.visibleMetrics.has(m.key))
-      .map((m) => ({
-        name: m.label,
-        data: (this.historicalSensorData || []).map((point) => ({
-          x: point.timestamp,
-          y: point[m.key as keyof SensorData] as number,
-        })),
-        color: m.color,
-      }));
+  // Helper methods for optimal/critical value coloring
+  isPhOptimal(): boolean {
+    return this.sensorData?.ph !== undefined && this.sensorData.ph >= 6.0 && this.sensorData.ph <= 6.5;
   }
-
-  getVisibleMetricColors() {
-    return this.allMetrics.filter((m) => this.visibleMetrics.has(m.key)).map((m) => m.color);
+  isPhCritical(): boolean {
+    return this.sensorData?.ph !== undefined && (this.sensorData.ph < 6.0 || this.sensorData.ph > 6.5);
+  }
+  isTempOptimal(): boolean {
+    return this.sensorData?.temperature !== undefined && this.sensorData.temperature >= 20 && this.sensorData.temperature <= 25;
+  }
+  isTempCritical(): boolean {
+    return this.sensorData?.temperature !== undefined && (this.sensorData.temperature < 20 || this.sensorData.temperature > 25);
+  }
+  isHumidityOptimal(): boolean {
+    return this.sensorData?.humidity !== undefined && this.sensorData.humidity >= 60 && this.sensorData.humidity <= 70;
+  }
+  isHumidityCritical(): boolean {
+    return this.sensorData?.humidity !== undefined && (this.sensorData.humidity < 60 || this.sensorData.humidity > 70);
+  }
+  isTphOptimal(): boolean {
+    return this.sensorData?.tph !== undefined && this.sensorData.tph < 0.1;
+  }
+  isTphCritical(): boolean {
+    return this.sensorData?.tph !== undefined && this.sensorData.tph >= 0.1;
+  }
+  isEcOptimal(): boolean {
+    return this.sensorData?.ec !== undefined && this.sensorData.ec >= 1.2 && this.sensorData.ec <= 2.2;
+  }
+  isEcCritical(): boolean {
+    return this.sensorData?.ec !== undefined && (this.sensorData.ec < 1.2 || this.sensorData.ec > 2.2);
   }
 }

@@ -117,6 +117,10 @@ export class GrowthDataTableComponent implements OnInit {
         if (value < 60 || value > 80) return 'text-red-600';
         if (value < 65 || value > 75) return 'text-yellow-600';
         return 'text-green-600';
+      case 'tph':
+        if (value < 0.5 || value > 1.5) return 'text-red-600';
+        if (value < 0.8 || value > 1.2) return 'text-yellow-600';
+        return 'text-green-600';
       default:
         return 'text-gray-600';
     }

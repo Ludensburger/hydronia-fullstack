@@ -220,4 +220,8 @@ export class AnalyticsComponent implements OnInit {
   getProgressPercentage(cycle: CropCycle): number {
     return Math.round((cycle.currentDay / cycle.totalDays) * 100);
   }
+
+  refreshData() {
+    this.updateRowSelection(this.selectedRow);
+  }
 }

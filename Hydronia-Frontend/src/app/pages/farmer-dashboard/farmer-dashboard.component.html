@@ -167,7 +167,13 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-medium text-muted-foreground">pH Level</p>
-              <p class="text-2xl font-bold text-primary">
+              <p
+                class="text-2xl font-bold"
+                [ngClass]="{
+                  'text-green-600': isPhOptimal(),
+                  'text-red-600': isPhCritical(),
+                }"
+              >
                 {{ sensorData?.ph }}
               </p>
               <p class="text-xs text-green-600">Optimal range: 6.0-6.5</p>
@@ -199,77 +205,14 @@
         <div class="p-6">
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm font-medium text-muted-foreground">
-                Temperature
-              </p>
-              <p class="text-2xl font-bold text-primary">
-                {{ sensorData?.temperature }}°C
-              </p>
-              <p class="text-xs text-green-600">Optimal: 20-25°C</p>
-            </div>
-            <div
-              class="h-12 w-12 bg-red-100 rounded-lg flex items-center justify-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                class="text-red-600"
-              >
-                <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0" />
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-card border border-border rounded-lg shadow-sm">
-        <div class="p-6">
-          <div class="flex items-center justify-between">
-            <div>
-              <p class="text-sm font-medium text-muted-foreground">Humidity</p>
-              <p class="text-2xl font-bold text-primary">
-                {{ sensorData?.humidity }}%
-              </p>
-              <p class="text-xs text-green-600">Optimal: 60-70%</p>
-            </div>
-            <div
-              class="h-12 w-12 bg-teal-100 rounded-lg flex items-center justify-center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                fill="none"
-                stroke="currentColor"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                class="text-teal-600"
-              >
-                <path
-                  d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05"
-                />
-                <path
-                  d="M12.56 6.6A11 11 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"
-                />
-              </svg>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div class="bg-card border border-border rounded-lg shadow-sm">
-        <div class="p-6">
-          <div class="flex items-center justify-between">
-            <div>
               <p class="text-sm font-medium text-muted-foreground">TPH (ppm)</p>
-              <p class="text-2xl font-bold text-primary">
+              <p
+                class="text-2xl font-bold"
+                [ngClass]="{
+                  'text-green-600': isTphOptimal(),
+                  'text-red-600': isTphCritical(),
+                }"
+              >
                 {{ sensorData?.tph }}
               </p>
               <p class="text-xs text-green-600">Safe: &lt;0.1</p>
@@ -302,7 +245,13 @@
           <div class="flex items-center justify-between">
             <div>
               <p class="text-sm font-medium text-muted-foreground">EC Level</p>
-              <p class="text-2xl font-bold text-primary">
+              <p
+                class="text-2xl font-bold"
+                [ngClass]="{
+                  'text-green-600': isEcOptimal(),
+                  'text-red-600': isEcCritical(),
+                }"
+              >
                 {{ sensorData?.ec }} mS/cm
               </p>
               <p class="text-xs text-green-600">Optimal: 1.2-2.2 mS/cm</p>
@@ -322,6 +271,87 @@
                 class="text-green-400"
               >
                 <path d="M13 2 3 14h4l-1 8 7-12 1 12-7-12h4z" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-card border border-border rounded-lg shadow-sm">
+        <div class="p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-muted-foreground">
+                Temperature
+              </p>
+              <p
+                class="text-2xl font-bold"
+                [ngClass]="{
+                  'text-green-600': isTempOptimal(),
+                  'text-red-600': isTempCritical(),
+                }"
+              >
+                {{ sensorData?.temperature }}°C
+              </p>
+              <p class="text-xs text-green-600">Optimal: 20-25°C</p>
+            </div>
+            <div
+              class="h-12 w-12 bg-red-100 rounded-lg flex items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                class="text-red-600"
+              >
+                <path d="M14 4v10.54a4 4 0 1 1-4 0V4a2 2 0 0 1 4 0" />
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="bg-card border border-border rounded-lg shadow-sm">
+        <div class="p-6">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-sm font-medium text-muted-foreground">Humidity</p>
+              <p
+                class="text-2xl font-bold"
+                [ngClass]="{
+                  'text-green-600': isHumidityOptimal(),
+                  'text-red-600': isHumidityCritical(),
+                }"
+              >
+                {{ sensorData?.humidity }}%
+              </p>
+              <p class="text-xs text-green-600">Optimal: 60-70%</p>
+            </div>
+            <div
+              class="h-12 w-12 bg-teal-100 rounded-lg flex items-center justify-center"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                class="text-teal-600"
+              >
+                <path
+                  d="M7 16.3c2.2 0 4-1.83 4-4.05 0-1.16-.57-2.26-1.71-3.19S7.29 6.75 7 5.3c-.29 1.45-1.14 2.84-2.29 3.76S3 11.1 3 12.25c0 2.22 1.8 4.05 4 4.05"
+                />
+                <path
+                  d="M12.56 6.6A11 11 0 0 0 14 3.02c.5 2.5 2 4.9 4 6.5s3 3.5 3 5.5a6.98 6.98 0 0 1-11.91 4.97"
+                />
               </svg>
             </div>
           </div>
@@ -380,13 +410,17 @@
             <app-plant-metrics-chart
               [data]="historicalSensorData"
               [selectedMetric]="selectedMetric"
-              [title]="
-                'Historical Sensor Data (Duplicate) - ' +
-                selectedRow.toUpperCase()
-              "
+              [title]="'Historical Sensor Data - ' + selectedRow.toUpperCase()"
               [height]="'260px'"
             ></app-plant-metrics-chart>
           </div>
+          <!-- <div class="p-6">
+            <app-plant-metrics-multichart
+              [data]="historicalSensorData"
+              [title]="'All Sensor Metrics - ' + selectedRow.toUpperCase()"
+              [height]="'260px'"
+            ></app-plant-metrics-multichart>
+          </div> -->
         </div>
 
         <!-- Images Tab -->

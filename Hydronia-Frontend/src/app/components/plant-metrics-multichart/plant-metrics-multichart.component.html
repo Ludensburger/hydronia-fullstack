@@ -1,0 +1,41 @@
+<div class="metrics-multichart-container relative">
+  <div
+    class="metrics-toggles z-10 relative mb-4 flex flex-wrap gap-2 items-center"
+  >
+    <span class="font-medium mr-2">Show/Hide Metrics:</span>
+    <ng-container *ngFor="let metric of allMetrics">
+      <button
+        (click)="toggleMetric(metric.key)"
+        [style.background]="
+          visibleMetrics.has(metric.key) ? metric.color : '#e5e7eb'
+        "
+        [style.color]="visibleMetrics.has(metric.key) ? '#fff' : '#374151'"
+        class="px-3 py-1 rounded-full text-xs font-semibold border border-gray-300 transition-colors focus:outline-none"
+        [class.opacity-60]="!visibleMetrics.has(metric.key)"
+        type="button"
+      >
+        {{ metric.label }}
+      </button>
+    </ng-container>
+  </div>
+  <apx-chart
+    [series]="getMultiChartSeries()"
+    [chart]="{
+      type: 'line',
+      height: height,
+      toolbar: { show: true },
+      zoom: { enabled: true },
+    }"
+    [xaxis]="{ type: 'datetime', labels: { datetimeUTC: false } }"
+    [yaxis]="{ labels: { formatter: yAxisLabelFormatter } }"
+    [colors]="getVisibleMetricColors()"
+    [legend]="{
+      show: true,
+      onItemClick: { toggleDataSeries: false },
+      onItemHover: { highlightDataSeries: true },
+    }"
+    [stroke]="{ width: 2 }"
+    [tooltip]="{ shared: true, intersect: false }"
+    [title]="{ text: title }"
+  ></apx-chart>
+</div>

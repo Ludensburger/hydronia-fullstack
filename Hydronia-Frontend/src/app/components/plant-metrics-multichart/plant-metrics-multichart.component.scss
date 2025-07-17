@@ -1,0 +1,11 @@
+.mb-4 button {
+  transition: background 0.2s, color 0.2s, opacity 0.2s;
+}
+
+.metrics-multichart-container {
+  position: relative;
+}
+.metrics-toggles {
+  position: relative;
+  z-index: 10;
+}
