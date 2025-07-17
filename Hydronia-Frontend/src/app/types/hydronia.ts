@@ -1,5 +1,5 @@
 export interface SensorData {
-  pH: number;
+  ph: number;
   ec: number;
   temperature: number;
   humidity: number;

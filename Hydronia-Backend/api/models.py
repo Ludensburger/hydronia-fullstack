@@ -55,7 +55,7 @@ CYCLE_CHOICES = [
 class SensorReading(models.Model):
     row = models.IntegerField()
     cycle = models.IntegerField(choices=CYCLE_CHOICES)
-    timestamp = models.DateTimeField(auto_now_add=True)
+    timestamp = models.DateTimeField()
     ph = models.FloatField()
     ec = models.FloatField()
     temperature = models.FloatField()

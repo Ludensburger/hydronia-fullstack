@@ -135,7 +135,7 @@ export class AnalyticsComponent implements OnInit {
     }
 
     return {
-      pH: avg(data, 'pH', 0),
+      pH: avg(data, 'ph', 0),
       ec: avg(data, 'ec', 0),
       temperature: avg(data, 'temperature', 0),
       humidity: avg(data, 'humidity', 0),

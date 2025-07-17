@@ -101,7 +101,7 @@ export class GrowthDataTableComponent implements OnInit {
 
   getValueColor(field: keyof SensorData, value: number): string {
     switch (field) {
-      case 'pH':
+      case 'ph':
         if (value < 5.5 || value > 7.5) return 'text-red-600';
         if (value < 6.0 || value > 7.0) return 'text-yellow-600';
         return 'text-green-600';
@@ -133,7 +133,7 @@ export class GrowthDataTableComponent implements OnInit {
     ];
     const csvData = this.filteredData.map((row) => [
       row.timestamp ? new Date(row.timestamp).toLocaleString() : '',
-      row.pH,
+      row.ph,
       row.ec,
       row.temperature,
       row.humidity,

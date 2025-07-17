@@ -53,11 +53,11 @@
           </th>
           <th class="text-left p-3 font-medium">
             <button
-              (click)="sort('pH')"
+              (click)="sort('ph')"
               class="flex items-center gap-2 hover:text-primary transition-colors"
             >
               pH Level
-              <span class="text-xs">{{ getSortIcon("pH") }}</span>
+              <span class="text-xs">{{ getSortIcon("ph") }}</span>
             </button>
           </th>
           <th class="text-left p-3 font-medium">
@@ -104,9 +104,9 @@
           [class]="i % 2 === 0 ? 'bg-gray-50' : 'bg-white'"
           class="border-b hover:bg-gray-100 transition-colors"
         >
-          <td class="p-3 text-sm">{{ row.timestamp | date : "medium" }}</td>
-          <td class="p-3 text-sm" [ngClass]="getValueColor('pH', row.pH)">
-            {{ row.pH }}
+          <td class="p-3 text-sm">{{ row.timestamp | date: "medium" }}</td>
+          <td class="p-3 text-sm" [ngClass]="getValueColor('ph', row.ph)">
+            {{ row.ph }}
           </td>
           <td class="p-3 text-sm" [ngClass]="getValueColor('ec', row.ec)">
             {{ row.ec }}
