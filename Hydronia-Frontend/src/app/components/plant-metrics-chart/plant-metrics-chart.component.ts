@@ -75,11 +75,13 @@ export class PlantMetricsChartComponent implements OnInit, OnChanges {
 
   updateChart(): void {
     this.currentMetric = this.metrics.find((m) => m.key === this.selectedMetric) || this.metrics[0];
+    // Map 'pH' to 'ph' for SensorData property access
+    const metricKey = this.selectedMetric === 'pH' ? 'ph' : this.selectedMetric;
     const data = (this.data || [])
       .filter(point => point.timestamp)
       .map(point => ({
         x: new Date(String(point.timestamp)),
-        y: point[this.selectedMetric as keyof SensorData] as number
+        y: point[metricKey as keyof SensorData] as number
       }));
 
     this.chartSeries = [

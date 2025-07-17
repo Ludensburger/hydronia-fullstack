@@ -8,7 +8,7 @@
     >
       <div>
         <h1
-          class="text-3xl md:text-4xl font-bold text-primary flex items-center gap-3"
+          class="text-3xl md:text-4xl font-bold text-primary flex items-center gap-3 whitespace-nowrap"
         >
           <svg
             class="h-8 w-8 md:h-10 md:w-10"
@@ -35,6 +35,35 @@
           class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
         >
           📊 Analytics
+        </button>
+        <button
+          (click)="refreshDashboard()"
+          class="inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 border border-input bg-background hover:bg-accent hover:text-accent-foreground h-10 px-4 py-2"
+          title="Refresh dashboard data"
+        >
+          <svg
+            class="h-4 w-4 mr-2 inline"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            width="16"
+            height="16"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="3"
+              d="M21 12a9 9 0 1 1-9-9c2.52 0 4.93 1 6.74 2.74L21 8"
+            />
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="3"
+              d="M21 3v5h-5"
+            />
+          </svg>
+
+          Refresh
         </button>
         <div
           class="user-info flex-shrink-0 flex items-center gap-2"
@@ -351,7 +380,10 @@
             <app-plant-metrics-chart
               [data]="historicalSensorData"
               [selectedMetric]="selectedMetric"
-              [title]="'Historical Sensor Data - ' + selectedRow.toUpperCase()"
+              [title]="
+                'Historical Sensor Data (Duplicate) - ' +
+                selectedRow.toUpperCase()
+              "
               [height]="'260px'"
             ></app-plant-metrics-chart>
           </div>

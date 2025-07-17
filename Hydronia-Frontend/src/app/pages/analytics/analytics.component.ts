@@ -85,16 +85,7 @@ export class AnalyticsComponent implements OnInit {
   constructor(private router: Router, private api: ApiService) {}
 
   ngOnInit(): void {
-    // Example: fetch for row 1, cycle 1
-    this.api.getSensorReadings(1, 1).subscribe({
-      next: (data) => {
-        this.sensorHistory = data || [];
-      },
-      error: (err) => {
-        console.error('Failed to fetch sensor history', err);
-        this.sensorHistory = [];
-      },
-    });
+    this.updateRowSelection(this.selectedRow);
   }
 
   goBack() {
@@ -113,7 +104,42 @@ export class AnalyticsComponent implements OnInit {
 
   updateRowSelection(row: string) {
     this.selectedRow = row;
-    // Filter data based on selected row
+    if (row === 'all') {
+      // Fetch all rows: getSensorReadings for each row and merge
+      const allRows = [1, 2, 3, 4];
+      const allData: SensorData[] = [];
+      let completed = 0;
+      allRows.forEach((rowNum) => {
+        this.api.getSensorReadings(rowNum, 1).subscribe({
+          next: (data) => {
+            if (Array.isArray(data)) allData.push(...data);
+            completed++;
+            if (completed === allRows.length) {
+              // Sort by timestamp ascending
+              this.sensorHistory = allData.sort((a, b) => new Date(a.timestamp || '').getTime() - new Date(b.timestamp || '').getTime());
+            }
+          },
+          error: () => {
+            completed++;
+            if (completed === allRows.length) {
+              this.sensorHistory = allData.sort((a, b) => new Date(a.timestamp || '').getTime() - new Date(b.timestamp || '').getTime());
+            }
+          },
+        });
+      });
+    } else {
+      // Fetch for a specific row
+      const rowNum = parseInt(row.replace('row-', ''), 10);
+      this.api.getSensorReadings(rowNum, 1).subscribe({
+        next: (data) => {
+          this.sensorHistory = data || [];
+        },
+        error: (err) => {
+          console.error('Failed to fetch sensor history', err);
+          this.sensorHistory = [];
+        },
+      });
+    }
   }
 
   // Calculate averages for the selected time period

@@ -4,7 +4,9 @@ import { AuthService } from '../../services/auth.service';
 import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+
 import { PlantMetricsChartComponent } from '../../components/plant-metrics-chart/plant-metrics-chart.component';
+import { NgApexchartsModule } from 'ng-apexcharts';
 
 import type {
   SensorData,
@@ -16,7 +18,7 @@ import type {
 @Component({
   selector: 'app-farmer-dashboard',
   standalone: true,
-  imports: [CommonModule, PlantMetricsChartComponent],
+  imports: [CommonModule, PlantMetricsChartComponent, NgApexchartsModule],
   templateUrl: './farmer-dashboard.component.html',
   styleUrls: ['./farmer-dashboard.component.scss'],
 })
@@ -86,11 +88,27 @@ export class FarmerDashboardComponent implements OnInit {
     },
   ];
 
+  // For multi-metric chart toggles
+  allMetrics = [
+    { key: 'ph', label: 'pH', color: '#3b82f6' },
+    { key: 'ec', label: 'EC', color: '#22c55e' },
+    { key: 'temperature', label: 'Temperature', color: '#ef4444' },
+    { key: 'humidity', label: 'Humidity', color: '#14b8a6' },
+    { key: 'tph', label: 'TPH', color: '#eab308' },
+  ];
+  visibleMetrics = new Set(this.allMetrics.map((m) => m.key));
+
   constructor(
     private auth: AuthService,
     private router: Router,
     private api: ApiService
   ) {}
+
+  // Refresh button handler
+  public refreshDashboard() {
+    this.fetchAllData();
+    this.fetchHistoricalSensorData();
+  }
 
   ngOnInit() {
     this.user$ = this.auth.currentUser$;
@@ -206,5 +224,30 @@ export class FarmerDashboardComponent implements OnInit {
 
   navigateToAnalytics() {
     this.router.navigate(['/analytics']);
+  }
+
+  toggleMetric(key: string) {
+    if (this.visibleMetrics.has(key)) {
+      this.visibleMetrics.delete(key);
+    } else {
+      this.visibleMetrics.add(key);
+    }
+  }
+
+  getMultiChartSeries() {
+    return this.allMetrics
+      .filter((m) => this.visibleMetrics.has(m.key))
+      .map((m) => ({
+        name: m.label,
+        data: (this.historicalSensorData || []).map((point) => ({
+          x: point.timestamp,
+          y: point[m.key as keyof SensorData] as number,
+        })),
+        color: m.color,
+      }));
+  }
+
+  getVisibleMetricColors() {
+    return this.allMetrics.filter((m) => this.visibleMetrics.has(m.key)).map((m) => m.color);
   }
 }
