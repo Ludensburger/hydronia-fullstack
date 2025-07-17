@@ -42,23 +42,23 @@ export class FarmerDashboardComponent implements OnInit {
     return values.reduce((a, b) => a + (b as number), 0) / values.length;
   }
   // Returns the color (as a CSS color string) for a given metric key, using the value from getMetricValue
-  getMetricColor(metric: keyof SensorData): string {
-    const val = this.getMetricValue(metric);
-    switch (metric) {
-      case 'ph':
-        return val == null ? '' : val < 6.0 ? '#dc2626' : val > 6.5 ? '#2563eb' : '#16a34a';
-      case 'temperature':
-        return val == null ? '' : val < 20 ? '#dc2626' : val > 25 ? '#2563eb' : '#16a34a';
-      case 'humidity':
-        return val == null ? '' : val < 60 ? '#dc2626' : val > 70 ? '#2563eb' : '#16a34a';
-      case 'tph':
-        return val == null ? '' : val < 0.1 ? '#16a34a' : '#2563eb';
-      case 'ec':
-        return val == null ? '' : val < 1.2 ? '#dc2626' : val > 2.2 ? '#2563eb' : '#16a34a';
-      default:
-        return '';
-    }
+getMetricColor(metric: keyof SensorData): string {
+  const val = this.getMetricValue(metric);
+  switch (metric) {
+    case 'ph':
+      return val == null ? '' : val < 6.0 ? '#eab308' : val > 6.5 ? '#8b5cf6' : '#16a34a';
+    case 'ec':
+      return val == null ? '' : val < 1.2 ? '#f97316' : val > 2.2 ? '#7c3aed' : '#16a34a';
+    case 'tph':
+      return val == null ? '' : val < 500 ? '#facc15' : val > 800 ? '#ec4899' : '#16a34a';
+    case 'temperature':
+      return val == null ? '' : val < 20 ? '#3b82f6' : val > 25 ? '#ef4444' : '#16a34a';
+    case 'humidity':
+      return val == null ? '' : val < 60 ? '#ef4444' : val > 70 ? '#3b82f6' : '#16a34a';
+    default:
+      return '';
   }
+}
   // Returns the optimal/safe range label for a given metric key
   getMetricRangeLabel(metric: keyof SensorData): string {
     switch (metric) {
@@ -79,9 +79,9 @@ export class FarmerDashboardComponent implements OnInit {
   // Color and icon helpers for each metric
   getPhColor(val: number|null): string {
     if (val == null) return '';
-    if (val < 6.0) return 'text-red-600';
-    if (val > 6.5) return 'text-blue-600';
-    return 'text-green-600';
+    if (val < 6.0) return 'text-yellow-400'; // 🍋 Yellow #eab308
+    if (val > 6.5) return 'text-purple-500'; // 💜 Purple #8b5cf6
+    return 'text-green-600'; // ✅ Green #16a34a
   }
   getPhIcon(val: number|null): 'down'|'up'|null {
     if (val == null) return null;
@@ -89,45 +89,51 @@ export class FarmerDashboardComponent implements OnInit {
     if (val > 6.5) return 'up';
     return null;
   }
+  // Temperature: blue for low, red for high
   getTempColor(val: number|null): string {
     if (val == null) return '';
-    if (val < 20) return 'text-red-600';
-    if (val > 25) return 'text-blue-600';
+    if (val < 20) return 'text-blue-600'; // Low temp = blue
+    if (val > 25) return 'text-red-600'; // High temp = red
     return 'text-green-600';
   }
   getTempIcon(val: number|null): 'down'|'up'|null {
     if (val == null) return null;
-    if (val < 20) return 'down';
-    if (val > 25) return 'up';
+    if (val < 20) return 'down'; // Down arrow for low
+    if (val > 25) return 'up';   // Up arrow for high
     return null;
   }
+  // Humidity: red for low, blue for high
   getHumidityColor(val: number|null): string {
     if (val == null) return '';
-    if (val < 60) return 'text-red-600';
-    if (val > 70) return 'text-blue-600';
+    if (val < 60) return 'text-red-600'; // Low humidity = red
+    if (val > 70) return 'text-blue-600'; // High humidity = blue
     return 'text-green-600';
   }
   getHumidityIcon(val: number|null): 'down'|'up'|null {
     if (val == null) return null;
-    if (val < 60) return 'down';
-    if (val > 70) return 'up';
+    if (val < 60) return 'down'; // Down arrow for low
+    if (val > 70) return 'up';   // Up arrow for high
     return null;
   }
-  getTphColor(val: number|null): string {
+  // TPH (Total Particulate Hydrocarbons) - now using ppm, safe: 500–800 ppm
+  getTphColor(val: number | null): string {
     if (val == null) return '';
-    if (val < 0.1) return 'text-green-600';
-    return 'text-blue-600';
+    if (val < 500) return 'text-amber-400'; // 🟡 Amber #facc15
+    if (val >= 500 && val <= 800) return 'text-green-600'; // ✅ Green #16a34a
+    if (val > 800) return 'text-pink-400';  // 🩷 Pink #ec4899
+    return '';
   }
-  getTphIcon(val: number|null): 'down'|'up'|null {
+  getTphIcon(val: number | null): 'down' | 'up' | null {
     if (val == null) return null;
-    if (val < 0.1) return null;
-    return 'up';
+    if (val < 500) return 'down'; // Down arrow for below safe
+    if (val > 800) return 'up';   // Up arrow for above safe
+    return null; // No icon if within safe range
   }
   getEcColor(val: number|null): string {
     if (val == null) return '';
-    if (val < 1.2) return 'text-red-600';
-    if (val > 2.2) return 'text-blue-600';
-    return 'text-green-600';
+    if (val < 1.2) return 'text-orange-500'; // 🧡 Orange #f97316
+    if (val > 2.2) return 'text-violet-600'; // 🟪 Violet #7c3aed
+    return 'text-green-600'; // ✅ Green #16a34a
   }
   getEcIcon(val: number|null): 'down'|'up'|null {
     if (val == null) return null;
@@ -345,10 +351,10 @@ export class FarmerDashboardComponent implements OnInit {
     return this.sensorData?.humidity !== undefined && (this.sensorData.humidity < 60 || this.sensorData.humidity > 70);
   }
   isTphOptimal(): boolean {
-    return this.sensorData?.tph !== undefined && this.sensorData.tph < 0.1;
+    return this.sensorData?.tph !== undefined && this.sensorData.tph >= 500 && this.sensorData.tph <= 800;
   }
   isTphCritical(): boolean {
-    return this.sensorData?.tph !== undefined && this.sensorData.tph >= 0.1;
+    return this.sensorData?.tph !== undefined && (this.sensorData.tph < 500 || this.sensorData.tph > 800);
   }
   isEcOptimal(): boolean {
     return this.sensorData?.ec !== undefined && this.sensorData.ec >= 1.2 && this.sensorData.ec <= 2.2;
