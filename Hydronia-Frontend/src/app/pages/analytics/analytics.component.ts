@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SensorData, CropCycle } from '../../types/hydronia';
+import { ApiService } from '../../services/api.service';
 import { PlantMetricsChartComponent } from '../../components/plant-metrics-chart/plant-metrics-chart.component';
 import { HealthStatusIndicatorComponent } from '../../components/health-status-indicator/health-status-indicator.component';
 import { GrowthDataTableComponent } from '../../components/growth-data-table/growth-data-table.component';
@@ -40,72 +41,7 @@ export class AnalyticsComponent implements OnInit {
   ];
 
   // Mock sensor data for different time periods
-  sensorHistory: SensorData[] = [
-    {
-      pH: 6.2,
-      ec: 1.8,
-      temperature: 24.5,
-      humidity: 65,
-      tph: 0.02,
-      timestamp: new Date('2024-01-01T08:00:00'),
-    },
-    {
-      pH: 6.1,
-      ec: 1.7,
-      temperature: 24.2,
-      humidity: 63,
-      tph: 0.021,
-      timestamp: new Date('2024-01-01T12:00:00'),
-    },
-    {
-      pH: 6.3,
-      ec: 1.9,
-      temperature: 24.8,
-      humidity: 67,
-      tph: 0.019,
-      timestamp: new Date('2024-01-01T16:00:00'),
-    },
-    {
-      pH: 6.0,
-      ec: 1.6,
-      temperature: 24.0,
-      humidity: 62,
-      tph: 0.022,
-      timestamp: new Date('2024-01-01T20:00:00'),
-    },
-    {
-      pH: 6.4,
-      ec: 2.0,
-      temperature: 25.0,
-      humidity: 68,
-      tph: 0.018,
-      timestamp: new Date('2024-01-02T08:00:00'),
-    },
-    {
-      pH: 6.2,
-      ec: 1.8,
-      temperature: 24.6,
-      humidity: 66,
-      tph: 0.02,
-      timestamp: new Date('2024-01-02T12:00:00'),
-    },
-    {
-      pH: 6.1,
-      ec: 1.7,
-      temperature: 24.3,
-      humidity: 64,
-      tph: 0.021,
-      timestamp: new Date('2024-01-02T16:00:00'),
-    },
-    {
-      pH: 6.3,
-      ec: 1.9,
-      temperature: 24.9,
-      humidity: 67,
-      tph: 0.019,
-      timestamp: new Date('2024-01-02T20:00:00'),
-    },
-  ];
+  sensorHistory: SensorData[] = [];
 
   cropCycles: CropCycle[] = [
     {
@@ -137,10 +73,19 @@ export class AnalyticsComponent implements OnInit {
     },
   ];
 
-  constructor(private router: Router) {}
+  constructor(private router: Router, private api: ApiService) {}
 
   ngOnInit(): void {
-    // Component initialization
+    // Example: fetch for row 1, cycle 1
+    this.api.getSensorReadings(1, 1).subscribe({
+      next: (data) => {
+        this.sensorHistory = data || [];
+      },
+      error: (err) => {
+        console.error('Failed to fetch sensor history', err);
+        this.sensorHistory = [];
+      },
+    });
   }
 
   goBack() {

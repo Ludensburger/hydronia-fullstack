@@ -1,18 +1,33 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { AuthService } from '../../services/auth.service';
+import { ApiService } from '../../services/api.service';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
-import { SensorData, Alert, Prediction } from '../../types/hydronia';
+import { PlantMetricsChartComponent } from '../../components/plant-metrics-chart/plant-metrics-chart.component';
+
+import type {
+  SensorData,
+  Alert,
+  Prediction,
+  PlantImage,
+} from '../../types/hydronia';
 
 @Component({
   selector: 'app-farmer-dashboard',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, PlantMetricsChartComponent],
   templateUrl: './farmer-dashboard.component.html',
   styleUrls: ['./farmer-dashboard.component.scss'],
 })
 export class FarmerDashboardComponent implements OnInit {
+  // For PlantMetricsChartComponent
+  historicalSensorData: SensorData[] = [];
+  selectedMetric: string = 'pH';
+  public plantImages: PlantImage[] = [];
+  public manualLogs: any[] = [];
+  public loadingImages = false;
+  public loadingLogs = false;
   user$!: Observable<any>;
   selectedRow = 'row-1';
   activeTab = 'monitoring';
@@ -27,13 +42,7 @@ export class FarmerDashboardComponent implements OnInit {
     { id: 'logs', label: 'Manual Logs' },
   ];
 
-  sensorData: SensorData = {
-    pH: 6.2,
-    ec: 1.8,
-    temperature: 24.5,
-    humidity: 65,
-    tph: 0.02,
-  };
+  sensorData: SensorData | null = null;
 
   alerts: Alert[] = [
     {
@@ -77,14 +86,101 @@ export class FarmerDashboardComponent implements OnInit {
     },
   ];
 
-  constructor(private auth: AuthService, private router: Router) {}
+  constructor(
+    private auth: AuthService,
+    private router: Router,
+    private api: ApiService
+  ) {}
 
   ngOnInit() {
     this.user$ = this.auth.currentUser$;
+    this.fetchAllData();
+    this.fetchHistoricalSensorData();
+  }
+
+  fetchAllData() {
+    const rowNum = this.getSelectedRowNumber();
+    const cycleNum = 1; // Default cycle, adjust as needed
+    // Sensor Data
+    this.api.getSensorReadings(rowNum, cycleNum).subscribe({
+      next: (data) => {
+        this.sensorData = data && data.length > 0 ? data[0] : null;
+      },
+      error: (err) => {
+        console.error('Failed to fetch sensor data', err);
+        this.sensorData = null;
+      },
+    });
+    // Plant Images
+    this.loadingImages = true;
+    this.api.getPlantImages(rowNum, cycleNum).subscribe({
+      next: (data) => {
+        this.plantImages = data || [];
+        this.loadingImages = false;
+      },
+      error: (err) => {
+        console.error('Failed to fetch plant images', err);
+        this.plantImages = [];
+        this.loadingImages = false;
+      },
+    });
+    // Manual Logs
+    this.loadingLogs = true;
+    this.api.getManualLogs(rowNum, cycleNum).subscribe({
+      next: (data) => {
+        this.manualLogs = data || [];
+        this.loadingLogs = false;
+      },
+      error: (err) => {
+        console.error('Failed to fetch manual logs', err);
+        this.manualLogs = [];
+        this.loadingLogs = false;
+      },
+    });
+    // Historical sensor data for chart
+    this.fetchHistoricalSensorData();
+  }
+
+  fetchHistoricalSensorData() {
+    const rowNum = this.getSelectedRowNumber();
+    const cycleNum = 1; // Default cycle, adjust as needed
+    console.log(
+      '[fetchHistoricalSensorData] Selected row:',
+      this.selectedRow,
+      'Row number:',
+      rowNum,
+      'Cycle:',
+      cycleNum
+    );
+    this.api.getSensorReadings(rowNum, cycleNum).subscribe({
+      next: (data) => {
+        console.log('[fetchHistoricalSensorData] Received sensor data:', data);
+        this.historicalSensorData =
+          data && data.length > 0
+            ? [...data].sort((a, b) => {
+                const ta = new Date(a.timestamp || '').getTime();
+                const tb = new Date(b.timestamp || '').getTime();
+                return ta - tb;
+              })
+            : [];
+      },
+      error: (err) => {
+        console.error('Failed to fetch historical sensor data', err);
+        this.historicalSensorData = [];
+      },
+    });
+  }
+
+  getSelectedRowNumber(): number {
+    // Assumes selectedRow is like 'row-1', 'row-2', etc.
+    const match = this.selectedRow.match(/row-(\d+)/);
+    return match ? parseInt(match[1], 10) : 1;
   }
 
   setSelectedRow(row: string) {
     this.selectedRow = row;
+    this.fetchAllData();
+    this.fetchHistoricalSensorData();
   }
 
   setActiveTab(tab: string) {

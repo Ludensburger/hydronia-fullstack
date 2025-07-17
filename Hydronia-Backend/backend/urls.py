@@ -20,6 +20,8 @@ from django.contrib import admin
 from django.urls import path
 from api.views import *
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+from api.views import WeatherAPIView
+
 
 
 urlpatterns = [
@@ -38,12 +40,15 @@ urlpatterns = [
     path('admin/', admin.site.urls),
 
     # Views
-    path('sensors/', SensorReadingCreateAPIView.as_view(), name='sensor-create'),
-    path('sensors/<int:row>/<int:cycle>/', SensorReadingListAPIView.as_view(), name='sensor-list'),
-    path('images/', PlantImageUploadAPIView.as_view(), name='image-upload'),
-    path('images/<int:row>/<int:cycle>/', PlantImageListAPIView.as_view(), name='image-list'),
-    path('logs/', ManualLogCreateAPIView.as_view(), name='manual-log-create'),
-    path('logs/<int:row>/<int:cycle>/', ManualLogListAPIView.as_view(), name='manual-log-list'),
+    path('api/sensors/', SensorReadingCreateAPIView.as_view(), name='sensor-create'),
+    path('api/sensors/<int:row>/<int:cycle>/', SensorReadingListAPIView.as_view(), name='sensor-list'),
+    path('api/images/', PlantImageUploadAPIView.as_view(), name='image-upload'),
+    path('api/images/<int:row>/<int:cycle>/', PlantImageListAPIView.as_view(), name='image-list'),
+    path('api/logs/', ManualLogCreateAPIView.as_view(), name='manual-log-create'),
+    path('api/logs/<int:row>/<int:cycle>/', ManualLogListAPIView.as_view(), name='manual-log-list'),
+
+
+    path('api/weather/', WeatherAPIView.as_view(), name='weather'),
 ]
 
 if settings.DEBUG:

@@ -59,6 +59,7 @@ export class PlantMetricsChartComponent implements OnInit {
   }
 
   formatValue(value: number): string {
+    if (typeof value !== 'number' || isNaN(value)) return '-';
     return `${value.toFixed(1)}${this.currentMetric.unit}`;
   }
 

@@ -74,3 +74,23 @@ class ManualLogListAPIView(generics.ListAPIView):
         row = self.kwargs['row']
         cycle = self.kwargs['cycle']
         return ManualLog.objects.filter(row=row, cycle=cycle).order_by('-timestamp')
+    
+from rest_framework.views import APIView
+import requests
+from environments import environment  # If you use an environments module
+    
+class WeatherAPIView(APIView):
+    def get(self, request):
+        city = request.query_params.get("city", "Cebu")
+        url = "https://api.openweathermap.org/data/2.5/weather"
+        params = {
+            "q": city,
+            "appid": environment.OPENWEATHER_API_KEY,  # or your API key directly
+            "units": "metric"
+        }
+        try:
+            response = requests.get(url, params=params)
+            data = response.json()
+            return Response(data)
+        except Exception as e:
+            return Response({"error": str(e)}, status=500)
