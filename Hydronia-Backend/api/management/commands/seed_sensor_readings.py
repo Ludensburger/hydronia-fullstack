@@ -27,7 +27,7 @@ class Command(BaseCommand):
                     ec=round(random.uniform(1.2, 2.2), 2),
                     temperature=round(random.uniform(22, 24), 1),
                     humidity=round(random.uniform(65, 70), 1),
-                    tph=round(random.uniform(0.015, 0.025), 3)
+                    tph=random.randint(500, 800)
                 )
                 # Row 2: Slightly below optimal
                 SensorReading.objects.create(
@@ -38,7 +38,7 @@ class Command(BaseCommand):
                     ec=round(random.uniform(0.8, 1.19), 2),
                     temperature=round(random.uniform(19, 21), 1),
                     humidity=round(random.uniform(55, 60), 1),
-                    tph=round(random.uniform(0.008, 0.014), 3)
+                    tph=random.randint(300, 499)
                 )
                 # Row 3: Slightly above optimal
                 SensorReading.objects.create(
@@ -49,7 +49,7 @@ class Command(BaseCommand):
                     ec=round(random.uniform(2.21, 2.7), 2),
                     temperature=round(random.uniform(25, 28), 1),
                     humidity=round(random.uniform(71, 80), 1),
-                    tph=round(random.uniform(0.026, 0.035), 3)
+                    tph=random.randint(801, 1200)
                 )
                 # Row 4: Far from optimal (over/under)
                 SensorReading.objects.create(
@@ -60,7 +60,7 @@ class Command(BaseCommand):
                     ec=round(random.uniform(0.2, 0.7), 2),
                     temperature=round(random.uniform(30, 35), 1),
                     humidity=round(random.uniform(35, 50), 1),
-                    tph=round(random.uniform(0.05, 0.1), 3)
+                    tph=random.randint(100, 299)
                 )
                 count += 4
         self.stdout.write(self.style.SUCCESS(f'Seeded {count} sensor readings.'))
