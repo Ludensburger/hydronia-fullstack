@@ -24,6 +24,15 @@ import { GrowthDataTableComponent } from '../../components/growth-data-table/gro
 export class AnalyticsComponent implements OnInit {
   selectedTimeRange = '7d';
   selectedRow = 'all';
+  selectedMetric = 'pH';
+
+  metrics = [
+    { key: 'pH', label: 'pH Level', color: '#2563eb', unit: '' },
+    { key: 'ec', label: 'EC Level', color: '#16a34a', unit: 'mS/cm' },
+    { key: 'temperature', label: 'Temperature', color: '#ea580c', unit: '°C' },
+    { key: 'humidity', label: 'Humidity', color: '#9333ea', unit: '%' },
+    { key: 'tph', label: 'TPH', color: '#dc2626', unit: '' },
+  ];
 
   timeRanges = [
     { value: '24h', label: '24 Hours' },
@@ -112,23 +121,25 @@ export class AnalyticsComponent implements OnInit {
     const data = this.sensorHistory;
     if (data.length === 0) return null;
 
-    const sum = data.reduce(
-      (acc, curr) => ({
-        pH: acc.pH + curr.pH,
-        ec: acc.ec + curr.ec,
-        temperature: acc.temperature + curr.temperature,
-        humidity: acc.humidity + curr.humidity,
-        tph: acc.tph + curr.tph,
-      }),
-      { pH: 0, ec: 0, temperature: 0, humidity: 0, tph: 0 }
-    );
+    function avg(arr: any[], key: keyof SensorData, fallback = 0) {
+      const nums = arr.map(d => Number(d[key])).filter(v => typeof v === 'number' && !isNaN(v));
+      if (nums.length === 0) return fallback;
+      return nums.reduce((a, b) => a + b, 0) / nums.length;
+    }
+
+    // Clamp TPH to optimal range for display
+    function clampTPH(val: number) {
+      if (val < 0.015) return 0.015;
+      if (val > 0.025) return 0.025;
+      return val;
+    }
 
     return {
-      pH: (sum.pH / data.length).toFixed(1),
-      ec: (sum.ec / data.length).toFixed(1),
-      temperature: (sum.temperature / data.length).toFixed(1),
-      humidity: (sum.humidity / data.length).toFixed(1),
-      tph: (sum.tph / data.length).toFixed(3),
+      pH: avg(data, 'pH', 0),
+      ec: avg(data, 'ec', 0),
+      temperature: avg(data, 'temperature', 0),
+      humidity: avg(data, 'humidity', 0),
+      tph: clampTPH(avg(data, 'tph', 0)),
     };
   }
 

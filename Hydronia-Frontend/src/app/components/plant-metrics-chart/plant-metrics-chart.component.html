@@ -4,6 +4,7 @@
     <select
       [(ngModel)]="selectedMetric"
       class="text-sm border rounded px-3 py-1"
+      (change)="updateChart()"
     >
       <option *ngFor="let metric of metrics" [value]="metric.key">
         {{ metric.label }}
@@ -21,6 +22,7 @@
 
   <div *ngIf="data.length > 0">
     <apx-chart
+      *ngIf="chartOptions"
       [series]="chartSeries"
       [chart]="chartOptions.chart"
       [xaxis]="chartOptions.xaxis"
@@ -28,7 +30,6 @@
       [stroke]="chartOptions.stroke"
       [colors]="chartOptions.colors"
       [tooltip]="chartOptions.tooltip"
-      [dataLabels]="chartOptions.dataLabels"
     ></apx-chart>
   </div>
 

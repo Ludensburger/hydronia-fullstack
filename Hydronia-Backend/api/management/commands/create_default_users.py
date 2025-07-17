@@ -5,7 +5,7 @@ from api.models import UserProfile
 User = get_user_model()
 
 class Command(BaseCommand):
-    help = 'Create default users: dev1 (DEV role) and farmer1 (FARMER role)'
+    help = 'Create default users: dev1 (DEV role), farmer1 (FARMER role), and admin (superuser)'
 
     def handle(self, *args, **options):
         # Create dev1 user
@@ -17,7 +17,6 @@ class Command(BaseCommand):
                 first_name='Dev',
                 last_name='User'
             )
-            # Create UserProfile for dev1
             UserProfile.objects.create(
                 user=dev_user,
                 role='DEV'
@@ -39,7 +38,6 @@ class Command(BaseCommand):
                 first_name='Farmer',
                 last_name='User'
             )
-            # Create UserProfile for farmer1
             UserProfile.objects.create(
                 user=farmer_user,
                 role='FARMER'
@@ -50,6 +48,27 @@ class Command(BaseCommand):
         else:
             self.stdout.write(
                 self.style.WARNING('Farmer user "farmer1" already exists')
+            )
+
+        # Create admin superuser
+        if not User.objects.filter(username='admin').exists():
+            admin_user = User.objects.create_superuser(
+                username='admin',
+                password='admin',
+                email='admin@hydronia.com',
+                first_name='Admin',
+                last_name='User'
+            )
+            UserProfile.objects.create(
+                user=admin_user,
+                role='ADMIN'
+            )
+            self.stdout.write(
+                self.style.SUCCESS(f'Successfully created admin superuser: {admin_user.username}')
+            )
+        else:
+            self.stdout.write(
+                self.style.WARNING('Admin superuser "admin" already exists')
             )
 
         self.stdout.write(
